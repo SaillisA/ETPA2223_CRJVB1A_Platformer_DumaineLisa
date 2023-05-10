@@ -1,11 +1,12 @@
-class sceneDepart extends Phaser.Scene {
+class SceneDepart extends Phaser.Scene {
     constructor(){
-        super("scene")
-
+        super("SceneDepart")
+        this.player;
+        this.controller = false;
+        this.tileset;
     }
     init(data){
-        {
-    }
+
     }
     preload(){
 

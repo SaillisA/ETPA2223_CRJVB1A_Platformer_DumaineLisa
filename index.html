@@ -9,6 +9,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
 <body>
 <script src="sceneDepart.js"></script>
+<script src="sceneTest.js"></script>
 
 <script type="text/javascript">
 
@@ -16,17 +17,17 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
     var config = {
         type: Phaser.AUTO,
-        width: 1000,
+        width: 2000,
         physics: {
             default: 'arcade',
             arcade: {
-            gravity: { y: false },
+            gravity: { y: false/*1000000*/ },
             debug: true
         }},
-        height: 800,
+        height: 950,
         input:{gamepad : true},
         pixelArt : true,
-        scene: [SceneDepart]
+        scene: [SceneTest]
     };
     new Phaser.Game(config);
 
