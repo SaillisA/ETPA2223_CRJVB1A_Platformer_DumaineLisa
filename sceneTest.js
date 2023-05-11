@@ -10,8 +10,8 @@ class SceneTest extends Phaser.Scene {
     }
     preload(){
         this.load.image('perso','assets/perso.png');
-        this.load.image("Phaser_tuilesdejeuTest","ressources/tiled/niveauTest/tilesetTest.png");
-        this.load.tilemapTiledJSON("carteTest","ressources/tiled/niveauTest/mapTest.json");
+        this.load.image("Phaser_tuilesdejeuTest","assets/tilesetTest.png");
+        this.load.tilemapTiledJSON("carteTest","assets/testotest.json");
     }
     create(){
         this.carteDuNiveau = this.add.tilemap("carteTest");
@@ -22,18 +22,18 @@ class SceneTest extends Phaser.Scene {
 
         this.calqueMurs.setCollisionByProperty({ estSolide: true }); 
 
-        this.player = this.physics.add.sprite(2432, 12952, 'perso');
+        this.player = this.physics.add.sprite(248, 1040, 'perso');
         //this.player.setSize(40, 90)
 
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.physics.world.setBounds(0, 0, 41000, 19000);
+        this.physics.world.setBounds(0, 0, 4096, 4096);
 
         //  ajout du champs de la caméra de taille identique à celle du monde
-        this.cameras.main.setBounds(0, 0, 41000, 19000);
+        this.cameras.main.setBounds(0, 0, 4096, 4096);
 
         // ancrage de la caméra sur le joueur
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(0.05);
+        this.cameras.main.setZoom(0.3);
 
         //coliders
         this.physics.add.collider(this.player,this.calqueMurs);
@@ -41,20 +41,16 @@ class SceneTest extends Phaser.Scene {
 
     update(){
         if (this.cursors.left.isDown || this.controller.left) { //si la touche gauche est appuyée
-            this.player.setVelocityX(-2000); //alors vitesse négative en X
+            this.player.setVelocityX(-500); //alors vitesse négative en X
             }
         else if (this.cursors.right.isDown || this.controller.right) { //sinon si la touche droite est appuyée
-              this.player.setVelocityX(2000); //alors vitesse positive en X
+              this.player.setVelocityX(500); //alors vitesse positive en X
             }
         else {
               this.player.setVelocityX(0)
             }
-        if (this.cursors.up.isDown || this.controller.up) {
-              this.player.setVelocityY(-2000);
-            }
-
-        else {
-              this.player.setVelocityY(0);
+        if (this.cursors.up.isDown && this.player.body.blocked.down|| this.controller.up) {
+              this.player.setVelocityY(-450);
             }
 
     }

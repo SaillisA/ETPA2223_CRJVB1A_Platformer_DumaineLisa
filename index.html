@@ -17,14 +17,14 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
     var config = {
         type: Phaser.AUTO,
-        width: 2000,
+        width: 850,
         physics: {
             default: 'arcade',
             arcade: {
-            gravity: { y: false/*1000000*/ },
+            gravity: { y: 400 },
             debug: true
         }},
-        height: 950,
+        height: 850,
         input:{gamepad : true},
         pixelArt : true,
         scene: [SceneTest]
