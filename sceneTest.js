@@ -12,15 +12,33 @@ class SceneTest extends Phaser.Scene {
         this.load.image('perso','assets/perso.png');
         this.load.image("Phaser_tuilesdejeuTest","assets/tilesetTest.png");
         this.load.tilemapTiledJSON("carteTest","assets/testotest.json");
+        this.load.image('imgInvisible','assets/trans.png');
     }
     create(){
         this.carteDuNiveau = this.add.tilemap("carteTest");
         this.tileset = this.carteDuNiveau.addTilesetImage("tilesetTest","Phaser_tuilesdejeuTest");
 
-        this.calqueMurs = this.carteDuNiveau.createLayer("murs",this.tileset);
-        this.calqueTronc = this.carteDuNiveau.createLayer("tronc",this.tileset);
 
+        //Calques simples :
+        this.calqueBackGround = this.carteDuNiveau.createLayer("fond",this.tileset);
+
+        this.calqueMurs = this.carteDuNiveau.createLayer("murs",this.tileset);
         this.calqueMurs.setCollisionByProperty({ estSolide: true }); 
+
+        this.calqueTronc = this.carteDuNiveau.createLayer("tronc",this.tileset);
+        this.calqueTronc.setCollisionByProperty({ estSolide: true });
+        
+        this.calquesDetails = this.carteDuNiveau.createLayer("detailsObjets",this.tileset);
+
+
+        //Calques d'objets :
+        this.trouTest = this.physics.add.group({immovable : true ,allowGravity : false});
+
+        this.calque_trou = this.carteDuNiveau.getObjectLayer("trou");
+        this.calque_trou.objects.forEach(calque_trou => {
+          this.inutile = this.trouTest.create(calque_trou.x+64,calque_trou.y+64,"imgInvisible"); 
+        });
+        //this.physics.add.overlap(this.player,this.trouTest,null,null,this);
 
         this.player = this.physics.add.sprite(248, 1040, 'perso');
         //this.player.setSize(40, 90)
@@ -37,6 +55,8 @@ class SceneTest extends Phaser.Scene {
 
         //coliders
         this.physics.add.collider(this.player,this.calqueMurs);
+        this.physics.add.collider(this.player,this.calqueTronc);
+
     }
 
     update(){
@@ -44,15 +64,24 @@ class SceneTest extends Phaser.Scene {
             this.player.setVelocityX(-500); //alors vitesse négative en X
             }
         else if (this.cursors.right.isDown || this.controller.right) { //sinon si la touche droite est appuyée
-              this.player.setVelocityX(500); //alors vitesse positive en X
+            this.player.setVelocityX(500); //alors vitesse positive en X
             }
         else {
-              this.player.setVelocityX(0)
+            this.player.setVelocityX(0)
             }
-        if (this.cursors.up.isDown && this.player.body.blocked.down|| this.controller.up) {
-              this.player.setVelocityY(-450);
+        if (this.cursors.up.isDown && this.player.body.blocked.down|| this.controller.up && this.player.body.blocked.down) {
+            console.log("sautette")
+            this.player.setVelocityY(-500);
             }
-
+        if (this.cursors.up.isDown && this.player.body.blocked.right){
+            console.log("grimpette")
+            this.player.setVelocityY(-450);
+            }
+        if (this.cursors.up.isDown && this.player.body.blocked.left){
+            console.log("grimpette")
+            this.player.setVelocityY(-450);
+            }
+    
     }
 
 }
