@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="21" height="18" tilewidth="128" tileheight="128" infinite="1" nextlayerid="8" nextobjectid="12">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="21" height="18" tilewidth="128" tileheight="128" infinite="1" nextlayerid="9" nextobjectid="13">
  <editorsettings>
   <export target="../../../assets/testotest.json" format="json"/>
  </editorsettings>
@@ -788,10 +788,6 @@
 </chunk>
   </data>
  </layer>
- <objectgroup id="7" name="grimpetteObjet">
-  <object id="8" x="1086.67" y="1024.5" width="514.667" height="639.5"/>
-  <object id="11" x="1280" y="1664" width="320" height="512"/>
- </objectgroup>
  <layer id="4" name="detailsObjets" width="21" height="18">
   <data encoding="csv">
    <chunk x="0" y="0" width="16" height="16">
@@ -818,5 +814,8 @@
   <object id="5" x="399.5" y="781" width="98.5" height="100.5">
    <ellipse/>
   </object>
+ </objectgroup>
+ <objectgroup id="8" name="camera1">
+  <object id="12" x="1282" y="1086" width="128" height="128"/>
  </objectgroup>
 </map>

@@ -5,6 +5,9 @@ class SceneTest extends Phaser.Scene {
         this.controller = false;
         this.tileset;
         this.grimeBool = false;
+        this.cacheBool = false;
+        this.cacher = false;
+
     }
     init(data){
 
@@ -31,23 +34,19 @@ class SceneTest extends Phaser.Scene {
 
 
         //Calques d'objets :
+        //trou
         this.trouTest = this.physics.add.group({immovable : true ,allowGravity : false});
         this.calque_trou = this.carteDuNiveauTest.getObjectLayer("trou");
         this.calque_trou.objects.forEach(calque_trou => {
           this.inutile = this.trouTest.create(calque_trou.x+64,calque_trou.y+64,"imgInvisible"); 
         });
         
-        /*
-        //calque de tronc
-        this.troncObjTest = this.physics.add.group({immovable : true ,allowGravity : false});
-        this.calque_troncObj = this.carteDuNiveauTest.getObjectLayer("trou");
-        this.calque_troncObj.objects.forEach(calque_troncObj => {
-          this.inutile = this.troncObjTest.create(calque_troncObj.x+64,calque_troncObj.y+64,"imgInvisible"); 
+        //camera 1
+        this.cam1 = this.physics.add.group({immovable : true ,allowGravity : false});
+        this.objetCamera1 = this.carteDuNiveauTest.getObjectLayer("camera1");
+        this.objetCamera1.objects.forEach(objetCamera1 => {
+          this.inutile = this.cam1.create(objetCamera1.x+64,objetCamera1.y+64,"imgInvisible"); 
         });
-        this.physics.add.overlap(this.player,this.troncObjTest,this.verifGrimpette,null,this);
-        */
-
-
 
         this.player = this.physics.add.sprite(248, 1040, 'perso');
         //this.player.setSize(40, 90)
@@ -60,19 +59,33 @@ class SceneTest extends Phaser.Scene {
 
         // ancrage de la caméra sur le joueur
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(0.3);
+        this.cameras.main.setZoom(0.5);
 
         //coliders
         this.physics.add.collider(this.player,this.calqueMurs);
         this.physics.add.collider(this.player,this.calqueTronc,this.verifGrimpette,null,this);
 
+        this.physics.add.overlap(this.player,this.trouTest,this.cachetteBool,null,this);
+
     }
 
     update(){
         if (this.cursors.left.isDown || this.controller.left) { //si la touche gauche est appuyée
+            if(this.cacher == true ){
+                console.log("plus cacher")
+                this.player.setVisible(true);
+                this.cacher = false;
+
+            }
             this.player.setVelocityX(-500); //alors vitesse négative en X
             }
         else if (this.cursors.right.isDown || this.controller.right) { //sinon si la touche droite est appuyée
+            if(this.cacher == true ){
+                console.log("plus cacher")
+                this.player.setVisible(true);
+                this.cacher = false;
+
+            }
             this.player.setVelocityX(500); //alors vitesse positive en X
             }
         else {
@@ -93,12 +106,21 @@ class SceneTest extends Phaser.Scene {
             this.player.setVelocityY(-450);
             }
         
+        if(this.cursors.space.isDown && this.cacheBool == true){
+            console.log("cacher")
+            this.player.setVisible(false);
+            this.cacher = true;
+        }
         this.grimeBool = false;
+        this.cacheBool = false;
     }
 
     verifGrimpette(){
         console.log("verifgrimpette")
         this.grimeBool = true;
     }
-
+    cachetteBool(){
+        console.log("cachette possible")
+        this.cacheBool = true;
+    }
 }
