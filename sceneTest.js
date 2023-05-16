@@ -4,41 +4,50 @@ class SceneTest extends Phaser.Scene {
         this.player;
         this.controller = false;
         this.tileset;
+        this.grimeBool = false;
     }
     init(data){
 
     }
     preload(){
-        this.load.image('perso','assets/perso.png');
-        this.load.image("Phaser_tuilesdejeuTest","assets/tilesetTest.png");
-        this.load.tilemapTiledJSON("carteTest","assets/testotest.json");
-        this.load.image('imgInvisible','assets/trans.png');
+        
     }
     create(){
-        this.carteDuNiveau = this.add.tilemap("carteTest");
-        this.tileset = this.carteDuNiveau.addTilesetImage("tilesetTest","Phaser_tuilesdejeuTest");
+        this.carteDuNiveauTest = this.add.tilemap("carteTest");
+        this.tileset = this.carteDuNiveauTest.addTilesetImage("tilesetTest","phaserTilesetTest");
 
 
         //Calques simples :
-        this.calqueBackGround = this.carteDuNiveau.createLayer("fond",this.tileset);
+        this.calqueBackGround = this.carteDuNiveauTest.createLayer("fond",this.tileset);
 
-        this.calqueMurs = this.carteDuNiveau.createLayer("murs",this.tileset);
+        this.calqueMurs = this.carteDuNiveauTest.createLayer("murs",this.tileset);
         this.calqueMurs.setCollisionByProperty({ estSolide: true }); 
 
-        this.calqueTronc = this.carteDuNiveau.createLayer("tronc",this.tileset);
+        this.calqueTronc = this.carteDuNiveauTest.createLayer("tronc",this.tileset);
         this.calqueTronc.setCollisionByProperty({ estSolide: true });
+        this.calqueTronc.setCollisionByProperty({estTronc : true });
         
-        this.calquesDetails = this.carteDuNiveau.createLayer("detailsObjets",this.tileset);
+        this.calquesDetails = this.carteDuNiveauTest.createLayer("detailsObjets",this.tileset);
 
 
         //Calques d'objets :
         this.trouTest = this.physics.add.group({immovable : true ,allowGravity : false});
-
-        this.calque_trou = this.carteDuNiveau.getObjectLayer("trou");
+        this.calque_trou = this.carteDuNiveauTest.getObjectLayer("trou");
         this.calque_trou.objects.forEach(calque_trou => {
           this.inutile = this.trouTest.create(calque_trou.x+64,calque_trou.y+64,"imgInvisible"); 
         });
-        //this.physics.add.overlap(this.player,this.trouTest,null,null,this);
+        
+        /*
+        //calque de tronc
+        this.troncObjTest = this.physics.add.group({immovable : true ,allowGravity : false});
+        this.calque_troncObj = this.carteDuNiveauTest.getObjectLayer("trou");
+        this.calque_troncObj.objects.forEach(calque_troncObj => {
+          this.inutile = this.troncObjTest.create(calque_troncObj.x+64,calque_troncObj.y+64,"imgInvisible"); 
+        });
+        this.physics.add.overlap(this.player,this.troncObjTest,this.verifGrimpette,null,this);
+        */
+
+
 
         this.player = this.physics.add.sprite(248, 1040, 'perso');
         //this.player.setSize(40, 90)
@@ -55,7 +64,7 @@ class SceneTest extends Phaser.Scene {
 
         //coliders
         this.physics.add.collider(this.player,this.calqueMurs);
-        this.physics.add.collider(this.player,this.calqueTronc);
+        this.physics.add.collider(this.player,this.calqueTronc,this.verifGrimpette,null,this);
 
     }
 
@@ -69,19 +78,27 @@ class SceneTest extends Phaser.Scene {
         else {
             this.player.setVelocityX(0)
             }
+
+
         if (this.cursors.up.isDown && this.player.body.blocked.down|| this.controller.up && this.player.body.blocked.down) {
             console.log("sautette")
             this.player.setVelocityY(-500);
             }
-        if (this.cursors.up.isDown && this.player.body.blocked.right){
+        if (this.cursors.up.isDown && this.player.body.right && this.grimeBool == true){
             console.log("grimpette")
             this.player.setVelocityY(-450);
             }
-        if (this.cursors.up.isDown && this.player.body.blocked.left){
+        if (this.cursors.up.isDown && this.player.body.blocked.left && this.grimeBool == true){
             console.log("grimpette")
             this.player.setVelocityY(-450);
             }
-    
+        
+        this.grimeBool = false;
+    }
+
+    verifGrimpette(){
+        console.log("verifgrimpette")
+        this.grimeBool = true;
     }
 
 }

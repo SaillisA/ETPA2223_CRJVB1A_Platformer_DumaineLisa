@@ -10,6 +10,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 <body>
 <script src="sceneDepart.js"></script>
 <script src="sceneTest.js"></script>
+<script src="scenePreload.js"></script>
+
 
 <script type="text/javascript">
 
@@ -27,7 +29,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         height: 850,
         input:{gamepad : true},
         pixelArt : true,
-        scene: [SceneTest]
+        scene: [ScenePreload,SceneTest]
     };
     new Phaser.Game(config);
 
