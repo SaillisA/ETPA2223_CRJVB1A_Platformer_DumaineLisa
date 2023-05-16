@@ -11,6 +11,7 @@ class ScenePreload extends Phaser.Scene {
         this.load.image("phaserTilesetTest","assets/tilesetTest.png");
         this.load.tilemapTiledJSON("carteTest","assets/testotest.json");
         this.load.image('imgInvisible','assets/trans.png');
+        this.load.image('imgNutt','assets/noisettes.png')
     }
     create(){
 

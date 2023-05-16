@@ -4,9 +4,16 @@ class SceneTest extends Phaser.Scene {
         this.player;
         this.controller = false;
         this.tileset;
+        this.noisettes = 10;
+        //grimpe
         this.grimeBool = false;
+        //cachette
         this.cacheBool = false;
         this.cacher = false;
+        //lance noisettes
+        this.noisettesCD = false;
+        this.directionPlayer = "";
+
 
     }
     init(data){
@@ -16,6 +23,15 @@ class SceneTest extends Phaser.Scene {
         
     }
     create(){
+        //creation des touches
+        this.keyA =this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);    //lancer noisettes
+        this.keyZ =this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);    //se cacher
+        this.keyE =this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);    //interaction
+        //la barre est utilisé pour le saut
+        //flèches directionnelles pour se déplacer a gauche et a droite
+        this.noisettesCD = false;
+
+
         this.carteDuNiveauTest = this.add.tilemap("carteTest");
         this.tileset = this.carteDuNiveauTest.addTilesetImage("tilesetTest","phaserTilesetTest");
 
@@ -45,7 +61,7 @@ class SceneTest extends Phaser.Scene {
         this.cam1 = this.physics.add.group({immovable : true ,allowGravity : false});
         this.objetCamera1 = this.carteDuNiveauTest.getObjectLayer("camera1");
         this.objetCamera1.objects.forEach(objetCamera1 => {
-          this.inutile = this.cam1.create(objetCamera1.x+64,objetCamera1.y+64,"imgInvisible"); 
+            this.inutile = this.cam1.create(objetCamera1.x+64,objetCamera1.y+64,"imgInvisible"); 
         });
 
         this.player = this.physics.add.sprite(248, 1040, 'perso');
@@ -61,6 +77,11 @@ class SceneTest extends Phaser.Scene {
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(0.5);
 
+        //noisettes
+        this.nutt = this.physics.add.group();
+        this.physics.add.collider(this.nutt, this.calqueMurs);
+        this.physics.add.collider(this.nutt, this.calqueTronc);
+
         //coliders
         this.physics.add.collider(this.player,this.calqueMurs);
         this.physics.add.collider(this.player,this.calqueTronc,this.verifGrimpette,null,this);
@@ -70,6 +91,7 @@ class SceneTest extends Phaser.Scene {
     }
 
     update(){
+        //déplacements + look up
         if (this.cursors.left.isDown || this.controller.left) { //si la touche gauche est appuyée
             if(this.cacher == true ){
                 console.log("plus cacher")
@@ -78,49 +100,84 @@ class SceneTest extends Phaser.Scene {
 
             }
             this.player.setVelocityX(-500); //alors vitesse négative en X
+            this.directionPlayer = "left"
             }
         else if (this.cursors.right.isDown || this.controller.right) { //sinon si la touche droite est appuyée
             if(this.cacher == true ){
                 console.log("plus cacher")
                 this.player.setVisible(true);
                 this.cacher = false;
-
             }
             this.player.setVelocityX(500); //alors vitesse positive en X
+            this.directionPlayer = "right"
             }
         else {
             this.player.setVelocityX(0)
             }
-
-
-        if (this.cursors.up.isDown && this.player.body.blocked.down|| this.controller.up && this.player.body.blocked.down) {
+        if(this.cursors.up.isDown || this.controller.up){
+            this.directionPlayer = "up"
+        }
+        
+        //saut et grimpette
+        if (this.cursors.space.isDown && this.player.body.blocked.down|| this.controller.B && this.player.body.blocked.down) {
             console.log("sautette")
             this.player.setVelocityY(-500);
             }
-        if (this.cursors.up.isDown && this.player.body.right && this.grimeBool == true){
+        if (this.cursors.space.isDown && this.player.body.right && this.grimeBool == true || this.controller.B && this.player.body.right && this.grimeBool == true){
             console.log("grimpette")
             this.player.setVelocityY(-450);
             }
-        if (this.cursors.up.isDown && this.player.body.blocked.left && this.grimeBool == true){
+        if (this.cursors.space.isDown && this.player.body.blocked.left && this.grimeBool == true || this.cursors.B && this.player.body.blocked.left && this.grimeBool == true){
             console.log("grimpette")
             this.player.setVelocityY(-450);
             }
         
-        if(this.cursors.space.isDown && this.cacheBool == true){
+        
+
+        //lancer noisettes
+        if(this.keyA.isDown && this.noisettes>0 && this.noisettesCD == false || this.controller.A && this.noisettes>0 && this.noisettesCD == false ){
+            console.log("condition pour lancer des noisettes remplies :)")
+            this.noisettes -= 1;
+            console.log(this.noisettes)
+
+            if(this.directionPlayer == "left" ){
+                this.nutt.create(this.player.x, this.player.y, "imgNutt").body.setVelocityX(-500)
+            };
+            if(this.directionPlayer == "right"){
+                this.nutt.create(this.player.x, this.player.y, "imgNutt").body.setVelocityX(500)
+            }
+            if(this.directionPlayer == "up" ){
+                this.nutt.create(this.player.x, this.player.y, "imgNutt").body.setVelocityY(-800)
+            };
+
+            this.noisettesCD = true;
+            this.time.delayedCall(500, this.resertNoisettesCD, [], this);
+        }
+
+        //cachette
+        if(this.keyZ.isDown && this.cacheBool == true){
             console.log("cacher")
             this.player.setVisible(false);
             this.cacher = true;
-        }
+        }    
         this.grimeBool = false;
         this.cacheBool = false;
     }
+
+
+
 
     verifGrimpette(){
         console.log("verifgrimpette")
         this.grimeBool = true;
     }
+    resertNoisettesCD(){
+        console.log("lancer de noisettes disponibles")
+        this.noisettesCD = false;
+    }
     cachetteBool(){
         console.log("cachette possible")
         this.cacheBool = true;
     }
+
 }

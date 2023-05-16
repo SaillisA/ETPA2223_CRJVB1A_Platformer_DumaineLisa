@@ -1,0 +1,20 @@
+Nutty's Journey :
+
+
+Contrôles clavier:
+<- et -> : déplacements gauche et droite
+Espace : sauter
+A : lancer une noisette
+Z : se cacher dans un trou
+
+
+Contrôles manette :
+<- et -> : déplacements gauche et droite
+B : sauter
+A : lancer une noisette
+Y : se cacher dans un trou
+
+
+
+Pas encore implémenter :
+Quand sur un tronc : fleches haut et bas pour monter descendre
