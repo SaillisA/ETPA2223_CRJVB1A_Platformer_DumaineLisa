@@ -22,7 +22,7 @@ class SceneTest extends Phaser.Scene {
     preload(){
         
     }
-    create(){
+    create(){   
         //creation des touches
         this.keyA =this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);    //lancer noisettes
         this.keyZ =this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);    //se cacher
@@ -30,7 +30,6 @@ class SceneTest extends Phaser.Scene {
         //la barre est utilisé pour le saut
         //flèches directionnelles pour se déplacer a gauche et a droite
         this.noisettesCD = false;
-
 
         this.carteDuNiveauTest = this.add.tilemap("carteTest");
         this.tileset = this.carteDuNiveauTest.addTilesetImage("tilesetTest","phaserTilesetTest");
@@ -162,6 +161,11 @@ class SceneTest extends Phaser.Scene {
         }    
         this.grimeBool = false;
         this.cacheBool = false;
+
+
+        if(this.cursors.down.isDown){
+            this.scene.start("SceneNiveau1")
+        }
     }
 
 
