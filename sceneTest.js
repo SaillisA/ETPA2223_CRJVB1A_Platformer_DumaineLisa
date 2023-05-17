@@ -1,3 +1,4 @@
+import{game} from 'index.html'
 class SceneTest extends Phaser.Scene {
     constructor(){
         super("SceneTest")
@@ -5,6 +6,10 @@ class SceneTest extends Phaser.Scene {
         this.controller = false;
         this.tileset;
         this.noisettes = 10;
+        //saut
+        this.jumpTimer = 0;
+        this.jumpDuration = 500;
+        this.jumpForce = -500;
         //grimpe
         this.grimeBool = false;
         //cachette
@@ -28,6 +33,8 @@ class SceneTest extends Phaser.Scene {
         this.keyZ =this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);    //se cacher
         this.keyE =this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);    //interaction
         //la barre est utilisé pour le saut
+        this.cursors.space.onDown.add(startJump);
+        this.cursors.space.onUp.add(endJump);
         //flèches directionnelles pour se déplacer a gauche et a droite
         this.noisettesCD = false;
 
@@ -119,19 +126,23 @@ class SceneTest extends Phaser.Scene {
         }
         
         //saut et grimpette
-        if (this.cursors.space.isDown && this.player.body.blocked.down|| this.controller.B && this.player.body.blocked.down) {
+
+        if(this.cursors.space.isDown && game.time.now >this.JumpTimer){
+            this.jump()
+        }
+        /*if (this.cursors.space.isDown && this.player.body.blocked.down|| this.controller.B && this.player.body.blocked.down) {
             console.log("sautette")
-            this.player.setVelocityY(-1000);
+            this.player.setVelocityY(-1300);
             }
         
         if (this.cursors.space.isDown && this.player.body.right && this.grimeBool == true || this.controller.B && this.player.body.right && this.grimeBool == true){
             console.log("grimpette")
-            this.player.setVelocityY(-600);
+            this.player.setVelocityY(-1000);
             }
         if (this.cursors.space.isDown && this.player.body.blocked.left && this.grimeBool == true || this.cursors.B && this.player.body.blocked.left && this.grimeBool == true){
             console.log("grimpette")
-            this.player.setVelocityY(-600);
-            }
+            this.player.setVelocityY(-1000);
+            }*/
         
         
 
@@ -170,9 +181,20 @@ class SceneTest extends Phaser.Scene {
         }
     }
 
+    startJump(){
+        if(game.time.now > this.jumpTimer){
+            this.jump()
+        }
+    }
 
 
-
+    jump(){
+        this.player.body.setVelocity.y = this.jumpForce;
+        this.jumpTimer = game.time.now + this.jumpDuration;
+    }
+    endJump(){
+        this.jumpTimer = 0
+    }
     verifGrimpette(){
         console.log("verifgrimpette")
         this.grimeBool = true;

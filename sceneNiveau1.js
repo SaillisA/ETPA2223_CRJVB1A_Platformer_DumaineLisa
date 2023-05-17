@@ -44,7 +44,7 @@ class SceneNiveau1 extends Phaser.Scene {
         //this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(0.2);
 
-
+        this.calquePremierPlanNiveau1 = this.carteDuNiv1.createLayer("premierPlan",this.tilesetNiv1);
         //calques objet
         //sortie
         //vide
@@ -90,10 +90,10 @@ class SceneNiveau1 extends Phaser.Scene {
             this.directionPlayer = "up"
         }
         
-        //saut et grimpette
+        //saut
         if (this.cursors.space.isDown && this.player.body.blocked.down|| this.controller.B && this.player.body.blocked.down) {
             console.log("sautette")
-            this.player.setVelocityY(-1500);
+            this.player.setVelocityY(-1300);
             }
         
     }
