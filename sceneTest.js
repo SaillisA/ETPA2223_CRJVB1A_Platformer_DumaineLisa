@@ -64,7 +64,8 @@ class SceneTest extends Phaser.Scene {
         });
 
         this.player = this.physics.add.sprite(248, 1040, 'perso');
-        //this.player.setSize(40, 90)
+        this.player.setSize(230, 130)
+        this.player.setOffset(165,75)
 
         this.cursors = this.input.keyboard.createCursorKeys();
         this.physics.world.setBounds(0, 0, 4096, 4096);
@@ -75,7 +76,7 @@ class SceneTest extends Phaser.Scene {
         // ancrage de la caméra sur le joueur
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(0.5);
-
+        
         //noisettes
         this.nutt = this.physics.add.group();
         this.physics.add.collider(this.nutt, this.calqueMurs);
@@ -120,15 +121,16 @@ class SceneTest extends Phaser.Scene {
         //saut et grimpette
         if (this.cursors.space.isDown && this.player.body.blocked.down|| this.controller.B && this.player.body.blocked.down) {
             console.log("sautette")
-            this.player.setVelocityY(-500);
+            this.player.setVelocityY(-1000);
             }
+        
         if (this.cursors.space.isDown && this.player.body.right && this.grimeBool == true || this.controller.B && this.player.body.right && this.grimeBool == true){
             console.log("grimpette")
-            this.player.setVelocityY(-450);
+            this.player.setVelocityY(-600);
             }
         if (this.cursors.space.isDown && this.player.body.blocked.left && this.grimeBool == true || this.cursors.B && this.player.body.blocked.left && this.grimeBool == true){
             console.log("grimpette")
-            this.player.setVelocityY(-450);
+            this.player.setVelocityY(-600);
             }
         
         
@@ -140,13 +142,13 @@ class SceneTest extends Phaser.Scene {
             console.log(this.noisettes)
 
             if(this.directionPlayer == "left" ){
-                this.nutt.create(this.player.x, this.player.y, "imgNutt").body.setVelocityX(-500)
+                this.nutt.create(this.player.x, this.player.y, "imgNutt").body.setVelocityX(-800)
             };
             if(this.directionPlayer == "right"){
-                this.nutt.create(this.player.x, this.player.y, "imgNutt").body.setVelocityX(500)
+                this.nutt.create(this.player.x, this.player.y, "imgNutt").body.setVelocityX(800)
             }
             if(this.directionPlayer == "up" ){
-                this.nutt.create(this.player.x, this.player.y, "imgNutt").body.setVelocityY(-800)
+                this.nutt.create(this.player.x, this.player.y, "imgNutt").body.setVelocityY(-1300)
             };
 
             this.noisettesCD = true;

@@ -33,18 +33,34 @@ class SceneNiveau1 extends Phaser.Scene {
         this.calqueMurNiv1.setCollisionByProperty({ estSolide: true }); 
 
 
-        this.player = this.physics.add.sprite(190, 1460, 'perso');
-        //this.player.setSize(40, 90)
+        this.player = this.physics.add.sprite(312, 2750, 'perso');
+        this.player.setSize(230, 130)
+        this.player.setOffset(165,75)
 
-        this.physics.world.setBounds(0, 0, 4580, 2304);
+        this.physics.world.setBounds(0, 0, 8960, 4608);
         //  ajout du champs de la caméra de taille identique à celle du monde
-        this.cameras.main.setBounds(0, 0, 4580, 2304);
+        this.cameras.main.setBounds(0, 0, 8960, 4608);
         // ancrage de la caméra sur le joueur
         //this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(0.4);
+        this.cameras.main.setZoom(0.2);
 
+
+        //calques objet
+        //sortie
+        //vide
+        this.vide = this.physics.add.group({immovable : true ,allowGravity : false});
+        this.objetVide = this.carteDuNiv1.getObjectLayer("vide");
+        this.objetVide.objects.forEach(objetVide => {
+          this.inutile = this.vide.create(objetVide.x+1000,objetVide.y+128,"imgInvisibleLong"); 
+        });
+
+
+
+        //collider :
         this.physics.add.collider(this.player,this.calqueMurNiv1);
 
+        //overlap :
+        this.physics.add.collider(this.player,this.vide,this.teleportationVide,null,this);
     }
 
     update(){
@@ -55,7 +71,7 @@ class SceneNiveau1 extends Phaser.Scene {
                 this.cacher = false;
 
             }
-            this.player.setVelocityX(-500); //alors vitesse négative en X
+            this.player.setVelocityX(-1000); //alors vitesse négative en X
             this.directionPlayer = "left"
             }
         else if (this.cursors.right.isDown || this.controller.right) { //sinon si la touche droite est appuyée
@@ -64,7 +80,7 @@ class SceneNiveau1 extends Phaser.Scene {
                 this.player.setVisible(true);
                 this.cacher = false;
             }
-            this.player.setVelocityX(500); //alors vitesse positive en X
+            this.player.setVelocityX(1000); //alors vitesse positive en X
             this.directionPlayer = "right"
             }
         else {
@@ -77,11 +93,14 @@ class SceneNiveau1 extends Phaser.Scene {
         //saut et grimpette
         if (this.cursors.space.isDown && this.player.body.blocked.down|| this.controller.B && this.player.body.blocked.down) {
             console.log("sautette")
-            this.player.setVelocityY(-500);
+            this.player.setVelocityY(-1500);
             }
         
     }
 
-
+    teleportationVide(){
+        this.player.body.x = 312;
+        this.player.body.y = 2750;
     }
+}
     
