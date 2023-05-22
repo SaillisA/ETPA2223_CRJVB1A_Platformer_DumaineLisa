@@ -11,8 +11,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 <script src="scenePreload.js"></script>
 <script src="sceneTest.js"></script>
 <script src="sceneNiveau1.js"></script>
+<script src="sceneNiveau2.js"></script>
 <script src="sceneDepart.js"></script>
-
 
 <script type="text/javascript">
 
@@ -31,9 +31,9 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         height: 920,
         input:{gamepad : true},
         pixelArt : true,
-        scene: [ScenePreload,SceneTest,SceneNiveau1]
+        scene: [ScenePreload,SceneTest,SceneNiveau1,SceneNiveau2]
     };
-    export var game = new Phaser.Game(config);
+    new Phaser.Game(config);
     
     
 </script>

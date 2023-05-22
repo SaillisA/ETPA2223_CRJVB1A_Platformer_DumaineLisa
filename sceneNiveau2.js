@@ -1,9 +1,11 @@
-class SceneNiveau1 extends Phaser.Scene {
+class SceneNiveau2 extends Phaser.Scene {
     constructor(){
-        super("SceneNiveau1")
+        super("SceneNiveau2")
         this.player;
         this.controller = false;
-        this.tilesetNiv1;
+        this.tilesetNiv2;
+        //grimpe
+        this.grimeBool = false;
 
     }
     init(data){
@@ -24,16 +26,18 @@ class SceneNiveau1 extends Phaser.Scene {
         this.noisettesCD = false;
     
 
-        this.carteDuNiv1 = this.add.tilemap("carteNiveau1");
-        this.tilesetNiv1 = this.carteDuNiv1.addTilesetImage("tilesetNiveau1","phaserTilesetNiveau1");
+        this.carteDuNiv2 = this.add.tilemap("carteNiveau2");
+        this.tilesetNiv2 = this.carteDuNiv2.addTilesetImage("tilesetNiveau2","phaserTilesetNiveau2");
 
-        this.calqueFondNiv1 = this.carteDuNiv1.createLayer("fonds",this.tilesetNiv1);
-        this.calqueBranchesNiv1 = this.carteDuNiv1.createLayer("branches",this.tilesetNiv1)
-        this.calqueMurNiv1 = this.carteDuNiv1.createLayer("mur",this.tilesetNiv1);
-        this.calqueMurNiv1.setCollisionByProperty({ estSolide: true }); 
+        this.calqueFondNiv2 = this.carteDuNiv2.createLayer("fonds",this.tilesetNiv2);
+        this.calqueBranchesNiv2 = this.carteDuNiv2.createLayer("branches",this.tilesetNiv2)
+        this.calqueMurNiv2 = this.carteDuNiv2.createLayer("mur",this.tilesetNiv2);
+        this.calqueMurNiv2.setCollisionByProperty({ estSolide: true }); 
 
+        this.calqueTroncNiv2 = this.carteDuNiv2.createLayer("tronc",this.tilesetNiv2);
+        this.calqueTroncNiv2.setCollisionByProperty({ estSolide: true })
 
-        this.player = this.physics.add.sprite(312, 2750, 'perso');
+        this.player = this.physics.add.sprite(194, 1620, 'perso');
         this.player.setSize(230, 130)
         this.player.setOffset(165,75)
 
@@ -44,29 +48,16 @@ class SceneNiveau1 extends Phaser.Scene {
         //this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(0.2);
 
-        this.calquePremierPlanNiveau1 = this.carteDuNiv1.createLayer("premierPlan",this.tilesetNiv1);
+        this.calquePremierPlanNiveau2 = this.carteDuNiv2.createLayer("premierPlan",this.tilesetNiv2);
         //calques objet
-        //sortie
-        this.sortie = this.physics.add.group({immovable : true ,allowGravity : false});
-        this.objetSortie = this.carteDuNiv1.getObjectLayer("sortie");
-        this.objetSortie.objects.forEach(objetSortie => {
-          this.inutile = this.sortie.create(objetSortie.x+32,objetSortie.y+32,"imgInvisibleHaut"); 
-        });
-        //vide
-        this.vide = this.physics.add.group({immovable : true ,allowGravity : false});
-        this.objetVide = this.carteDuNiv1.getObjectLayer("vide");
-        this.objetVide.objects.forEach(objetVide => {
-          this.inutile = this.vide.create(objetVide.x+1000,objetVide.y+128,"imgInvisibleLong"); 
-        });
 
 
 
         //collider :
-        this.physics.add.collider(this.player,this.calqueMurNiv1);
+        this.physics.add.collider(this.player,this.calqueMurNiv2);
+        this.physics.add.collider(this.player,this.calqueTroncNiv2,this.verifGrimpette,null,this);
 
         //overlap :
-        this.physics.add.collider(this.player,this.vide,this.teleportationVide,null,this);
-        this.physics.add.collider(this.player,this.sortie,this.prochainNiveau,null,this)
     }
 
     update(){
@@ -101,15 +92,21 @@ class SceneNiveau1 extends Phaser.Scene {
             console.log("sautette")
             this.player.setVelocityY(-1000);
             }
+        if (this.cursors.space.isDown && this.player.body.right && this.grimeBool == true || this.controller.B && this.player.body.right && this.grimeBool == true){
+            console.log("grimpette")
+            this.player.setVelocityY(-1000);
+            }
+        if (this.cursors.space.isDown && this.player.body.blocked.left && this.grimeBool == true || this.cursors.B && this.player.body.blocked.left && this.grimeBool == true){
+            console.log("grimpette")
+            this.player.setVelocityY(-1000);
+            }
+            
         
     }
+    verifGrimpette(){
+        console.log("verifgrimpette")
+        this.grimeBool = true;
+    }
 
-    teleportationVide(){
-        this.player.body.x = 312;
-        this.player.body.y = 2750;
-    }
-    prochainNiveau(){
-        this.scene.start('SceneNiveau2')
-    }
 }
     
