@@ -120,19 +120,19 @@ class SceneTest extends Phaser.Scene {
         }
         
         //saut et grimpette
-    if (this.cursors.space.isDown && this.player.body.blocked.down|| this.controller.B && this.player.body.blocked.down) {
-            console.log("sautette")
-            this.player.setVelocityY(-1300);
+        if (this.cursors.space.isDown && this.player.body.blocked.down|| this.controller.B && this.player.body.blocked.down) {
+                console.log("sautette")
+                this.player.setVelocityY(-1300);
+                }
+            
+        if (this.cursors.space.isDown && this.player.body.right && this.grimeBool == true || this.controller.B && this.player.body.right && this.grimeBool == true){
+            console.log("grimpette")
+            this.player.setVelocityY(-1000);
             }
-        
-    if (this.cursors.space.isDown && this.player.body.right && this.grimeBool == true || this.controller.B && this.player.body.right && this.grimeBool == true){
-        console.log("grimpette")
-        this.player.setVelocityY(-1000);
-        }
-    if (this.cursors.space.isDown && this.player.body.blocked.left && this.grimeBool == true || this.cursors.B && this.player.body.blocked.left && this.grimeBool == true){
-        console.log("grimpette")
-        this.player.setVelocityY(-1000);
-        }
+        if (this.cursors.space.isDown && this.player.body.blocked.left && this.grimeBool == true || this.cursors.B && this.player.body.blocked.left && this.grimeBool == true){
+            console.log("grimpette")
+            this.player.setVelocityY(-1000);
+            }
         
         
 

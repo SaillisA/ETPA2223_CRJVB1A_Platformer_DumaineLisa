@@ -101,7 +101,7 @@ class SceneNiveau2 extends Phaser.Scene {
             this.player.setVelocityY(-1000);
             }
             
-        
+        this.grimeBool = false;
     }
     verifGrimpette(){
         console.log("verifgrimpette")

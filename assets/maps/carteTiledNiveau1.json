@@ -150,13 +150,13 @@
          "objects":[
                 {
                  "class":"",
-                 "height":638.666666666667,
+                 "height":638.667,
                  "id":66,
                  "name":"",
                  "rotation":0,
                  "visible":true,
-                 "width":26.6666666666679,
-                 "x":8933.33333333333,
+                 "width":26.6667,
+                 "x":8933.33,
                  "y":1024
                 }],
          "opacity":1,
@@ -177,9 +177,9 @@
                  "name":"",
                  "rotation":0,
                  "visible":true,
-                 "width":6788,
-                 "x":636,
-                 "y":4592
+                 "width":8960,
+                 "x":-1.5,
+                 "y":4592.5
                 }],
          "opacity":1,
          "type":"objectgroup",

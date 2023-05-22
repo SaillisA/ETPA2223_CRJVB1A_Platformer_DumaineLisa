@@ -630,7 +630,7 @@
   <object id="66" x="8933.33" y="1024" width="26.6667" height="638.667"/>
  </objectgroup>
  <objectgroup id="5" name="vide">
-  <object id="5" x="636" y="4592" width="6788" height="16"/>
+  <object id="5" x="-1.5" y="4592.5" width="8960" height="16"/>
  </objectgroup>
  <layer id="8" name="premierPlan" width="70" height="36">
   <data encoding="csv">
