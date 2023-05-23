@@ -51,6 +51,11 @@ class SceneNiveau2 extends Phaser.Scene {
         this.calqueTroncNiv2.setCollisionByProperty({ estSolide: true })
 
         //calques objet
+        this.trouNiv2 = this.physics.add.group({immovable : true ,allowGravity : false});
+        this.objetTrouNiv2 = this.carteDuNiv2.getObjectLayer("trou");
+        this.objetTrouNiv2.objects.forEach(objetTrouNiv2 => {
+          this.inutile = this.trouNiv2.create(objetTrouNiv2.x+64,objetTrouNiv2.y+64,"imgInvisible"); 
+        });
 
         this.player = this.physics.add.sprite(194, 1620, 'perso');
         this.player.setSize(230, 130)
@@ -78,6 +83,7 @@ class SceneNiveau2 extends Phaser.Scene {
         this.collisionMurCasser=this.physics.add.collider(this.player,this.calqueMurCasserNiv2);
         this.collisionMurFragile=this.physics.add.collider(this.player,this.calqueMurFragileNiv2);
         //overlap :
+        this.physics.add.overlap(this.player,this.trouTest,this.cachetteBool,null,this);
     }
 
     update(){
