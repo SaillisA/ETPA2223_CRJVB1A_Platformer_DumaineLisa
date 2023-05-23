@@ -61,7 +61,7 @@ class SceneTest extends Phaser.Scene {
         this.cam1 = this.physics.add.group({immovable : true ,allowGravity : false});
         this.objetCamera1 = this.carteDuNiveauTest.getObjectLayer("camera1");
         this.objetCamera1.objects.forEach(objetCamera1 => {
-            this.inutile = this.cam1.create(objetCamera1.x+64,objetCamera1.y+64,"imgInvisible"); 
+            this.pasSiInutileQueCa = this.cam1.create(objetCamera1.x+64,objetCamera1.y+64,"imgInvisible"); 
         });
 
         this.player = this.physics.add.sprite(248, 1040, 'perso');
