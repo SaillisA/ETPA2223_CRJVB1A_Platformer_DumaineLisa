@@ -30,21 +30,33 @@ class SceneNiveau3 extends Phaser.Scene {
         //flèches directionnelles pour se déplacer a gauche et a droite
         this.noisettesCD = false;
 
+        this.carteDuNiv3 = this.add.tilemap("carteNiveau3");
+        this.tileset = this.carteDuNiv3.addTilesetImage("tileset", "phaserTileset");
 
-        this.player = this.physics.add.sprite(194, 1620, 'perso');
+        this.calqueFondNiv3 = this.carteDuNiv3.createLayer("fonds", this.tileset);
+        this.calqueBranchesNiv3 = this.carteDuNiv3.createLayer("branches", this.tileset)
+
+        this.calqueMurNiv3 = this.carteDuNiv3.createLayer("mur", this.tileset);
+        this.calqueMurNiv3.setCollisionByProperty({ estSolide: true });
+
+        this.calqueTroncNiv3 = this.carteDuNiv3.createLayer("tronc", this.tileset);
+        this.calqueTroncNiv3.setCollisionByProperty({ estSolide: true })
+
+
+        this.player = this.physics.add.sprite(192, 3212, 'perso');
         this.player.setSize(230, 130)
         this.player.setOffset(165, 75)
 
         this.physics.world.setBounds(0, 0, 8960, 4608);
-        //  ajout du champs de la caméra de taille identique à celle du monde
         this.cameras.main.setBounds(0, 0, 8960, 4608);
-        // ancrage de la caméra sur le joueur
-        //this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(0.2);
 
 
         //calques objet
 
+
+        this.physics.add.collider(this.player, this.calqueMurNiv3);
+        this.physics.add.collider(this.player, this.calqueTroncNiv3, this.verifGrimpette, null, this);
         //noisettes
         this.nutt = this.physics.add.group();
     }

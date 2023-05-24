@@ -70,9 +70,9 @@ class SceneNiveau2 extends Phaser.Scene {
             this.inutile = this.videNiv2.create(objetVideNiv2.x + 4480, objetVideNiv2.y + 128, "imgInvisibleLong");
         });
         this.sortieNiv2 = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetSortieNiv2 = this.carteDuNiv2.getObjectLayer("vide");
+        this.objetSortieNiv2 = this.carteDuNiv2.getObjectLayer("sortie");
         this.objetSortieNiv2.objects.forEach(objetSortieNiv2 => {
-            this.inutile = this.sortieNiv2.create(objetSortieNiv2.x, objetSortieNiv2.y, "imgInvisibleHaut");
+            this.inutile = this.sortieNiv2.create(objetSortieNiv2.x, objetSortieNiv2.y+256, "imgInvisibleHaut");
         });
 
 
@@ -83,10 +83,7 @@ class SceneNiveau2 extends Phaser.Scene {
         this.player.setOffset(165, 75)
 
         this.physics.world.setBounds(0, 0, 8960, 4608);
-        //  ajout du champs de la caméra de taille identique à celle du monde
         this.cameras.main.setBounds(0, 0, 8960, 4608);
-        // ancrage de la caméra sur le joueur
-        //this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(0.2);
 
         this.calquePremierPlanNiveau2 = this.carteDuNiv2.createLayer("premierPlan", this.tileset);
@@ -222,7 +219,7 @@ class SceneNiveau2 extends Phaser.Scene {
         this.player.body.y = 1620;
     }
     prochainNiveau(){
-        this.start.scene('sceneNiveau3')
+        this.scene.start('sceneNiveau3')
     }
 
 }

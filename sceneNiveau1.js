@@ -38,10 +38,7 @@ class SceneNiveau1 extends Phaser.Scene {
         this.player.setOffset(165, 75)
 
         this.physics.world.setBounds(0, 0, 8960, 4608);
-        //  ajout du champs de la caméra de taille identique à celle du monde
         this.cameras.main.setBounds(0, 0, 8960, 4608);
-        // ancrage de la caméra sur le joueur
-        //this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(0.2);
 
         this.calquePremierPlanNiveau1 = this.carteDuNiv1.createLayer("premierPlan", this.tileset);
