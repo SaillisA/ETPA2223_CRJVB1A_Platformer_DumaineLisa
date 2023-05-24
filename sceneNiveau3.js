@@ -1,6 +1,6 @@
-class SceneNiveau2 extends Phaser.Scene {
+class SceneNiveau3 extends Phaser.Scene {
     constructor() {
-        super("SceneNiveau2")
+        super("SceneNiveau3")
         this.player;
         this.controller = false;
         this.tileset;
@@ -30,53 +30,6 @@ class SceneNiveau2 extends Phaser.Scene {
         //flèches directionnelles pour se déplacer a gauche et a droite
         this.noisettesCD = false;
 
-        this.carteDuNiv2 = this.add.tilemap("carteNiveau2");
-        this.tileset = this.carteDuNiv2.addTilesetImage("tileset", "phaserTileset");
-
-
-        //calques tuiles
-        this.calqueFondNiv2 = this.carteDuNiv2.createLayer("fonds", this.tileset);
-        this.calqueBranchesNiv2 = this.carteDuNiv2.createLayer("branches", this.tileset)
-
-        this.calqueMurNiv2 = this.carteDuNiv2.createLayer("mur", this.tileset);
-        this.calqueMurNiv2.setCollisionByProperty({ estSolide: true });
-
-        this.calqueMurCasserNiv2 = this.carteDuNiv2.createLayer("murCasser", this.tileset);
-        this.calqueMurCasserNiv2.setCollisionByProperty({ estSolide: true });
-
-        this.calqueMurFragileNiv2 = this.carteDuNiv2.createLayer("fragile", this.tileset);
-        this.calqueMurFragileNiv2.setCollisionByProperty({ estSolide: true });
-
-        this.calqueTroncNiv2 = this.carteDuNiv2.createLayer("tronc", this.tileset);
-        this.calqueTroncNiv2.setCollisionByProperty({ estSolide: true })
-
-        //calques objet
-        //cachettes trous
-        this.trouNiv2 = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetTrouNiv2 = this.carteDuNiv2.getObjectLayer("trou");
-        this.objetTrouNiv2.objects.forEach(objetTrouNiv2 => {
-            this.inutile = this.trouNiv2.create(objetTrouNiv2.x + 64, objetTrouNiv2.y + 32, "imgTrouCachette");
-        });
-        //range de l'oiseau
-        this.rangeNiv2 = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetRangeNiv2 = this.carteDuNiv2.getObjectLayer("rangeDetection");
-        this.objetRangeNiv2.objects.forEach(objetRangeNiv2 => {
-            this.inutile = this.rangeNiv2.create(objetRangeNiv2.x + 2760, objetRangeNiv2.y + 1860, "imgInvisibleRangeOiseau");
-        });
-        //vide
-        this.videNiv2 = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetVideNiv2 = this.carteDuNiv2.getObjectLayer("vide");
-        this.objetVideNiv2.objects.forEach(objetVideNiv2 => {
-            this.inutile = this.videNiv2.create(objetVideNiv2.x + 4480, objetVideNiv2.y + 128, "imgInvisibleLong");
-        });
-        this.sortieNiv2 = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetSortieNiv2 = this.carteDuNiv2.getObjectLayer("vide");
-        this.objetSortieNiv2.objects.forEach(objetSortieNiv2 => {
-            this.inutile = this.sortieNiv2.create(objetSortieNiv2.x, objetSortieNiv2.y, "imgInvisibleHaut");
-        });
-
-
-
 
         this.player = this.physics.add.sprite(194, 1620, 'perso');
         this.player.setSize(230, 130)
@@ -89,25 +42,11 @@ class SceneNiveau2 extends Phaser.Scene {
         //this.cameras.main.startFollow(this.player);
         this.cameras.main.setZoom(0.2);
 
-        this.calquePremierPlanNiveau2 = this.carteDuNiv2.createLayer("premierPlan", this.tileset);
+
         //calques objet
 
         //noisettes
         this.nutt = this.physics.add.group();
-        this.physics.add.collider(this.nutt, this.calqueMurNiv2);
-        this.physics.add.collider(this.nutt, this.calqueTroncNiv2);
-        this.physics.add.collider(this.nutt, this.calqueMurCasserNiv2);
-        this.physics.add.collider(this.nutt, this.calqueMurFragileNiv2, this.brancheCasser, null, this);
-        this.physics.add.overlap(this.player, this.nutt, this.recupNutt, null, this)
-        //collider :
-        this.physics.add.collider(this.player, this.calqueMurNiv2);
-        this.physics.add.collider(this.player, this.calqueTroncNiv2, this.verifGrimpette, null, this);
-        this.collisionMurCasser = this.physics.add.collider(this.player, this.calqueMurCasserNiv2);
-        this.collisionMurFragile = this.physics.add.collider(this.player, this.calqueMurFragileNiv2);
-        this.physics.add.collider(this.player, this.videNiv2, this.teleportationVide, null, this);
-        //overlap :
-        this.physics.add.overlap(this.player, this.trouNiv2, this.cachetteBool, null, this);
-        this.physics.add.overlap(this.player, this.sortieNiv2, this.prochainNiveau, null, this);
     }
 
     update() {
@@ -201,14 +140,7 @@ class SceneNiveau2 extends Phaser.Scene {
         console.log("cachette possible")
         this.cacheBool = true;
     }
-    brancheCasser(nutt) {
-        this.calqueMurCasserNiv2.setVisible(false);
-        this.physics.world.removeCollider(this.collisionMurFragile)
-        this.calqueMurFragileNiv2.setVisible(false);
-        this.physics.world.removeCollider(this.collisionMurCasser)
-        nutt.setVisible(false);
 
-    }
     recupNutt(player, nutt) {
         if (nutt.body.blocked.down) {
             console.log(this.noisettes)
@@ -216,13 +148,6 @@ class SceneNiveau2 extends Phaser.Scene {
             this.noisettes += 1;
             console.log(this.noisettes)
         }
-    }
-    teleportationVide() {
-        this.player.body.x = 194;
-        this.player.body.y = 1620;
-    }
-    prochainNiveau(){
-        this.start.scene('sceneNiveau3')
     }
 
 }

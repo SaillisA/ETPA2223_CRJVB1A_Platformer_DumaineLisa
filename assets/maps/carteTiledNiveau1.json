@@ -244,11 +244,11 @@
         {
          "columns":10,
          "firstgid":1,
-         "image":"..\/..\/ressources\/tiled\/scene1\/tilesetNiveau1.png",
+         "image":"..\/..\/ressources\/tiled\/tileset.png",
          "imageheight":1280,
          "imagewidth":1280,
          "margin":0,
-         "name":"tilesetNiveau1",
+         "name":"tileset",
          "spacing":0,
          "tilecount":100,
          "tileheight":128,
