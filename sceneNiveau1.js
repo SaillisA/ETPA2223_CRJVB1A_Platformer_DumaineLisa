@@ -4,7 +4,10 @@ class SceneNiveau1 extends Phaser.Scene {
         this.player;
         this.controller = false;
         this.tileset;
-
+        this.noisettes = 10
+        //lance noisettes
+        this.noisettesCD = false;
+        this.directionPlayer = "";
     }
     init(data) {
 
@@ -56,7 +59,9 @@ class SceneNiveau1 extends Phaser.Scene {
             this.inutile = this.vide.create(objetVide.x + 1000, objetVide.y + 128, "imgInvisibleLong");
         });
 
-
+        this.nutt = this.physics.add.group();
+        this.physics.add.collider(this.nutt, this.calqueMurNiv1);
+        this.physics.add.collider(this.nutt, this.calqueTroncNiv1);
 
         //collider :
         this.physics.add.collider(this.player, this.calqueMurNiv1);
@@ -117,6 +122,9 @@ class SceneNiveau1 extends Phaser.Scene {
             this.noisettesCD = true;
             this.time.delayedCall(500, this.resertNoisettesCD, [], this);
         }
+        if (this.cursors.down.isDown) {
+            this.scene.start("SceneNiveau2", {noisettes : this.noisettes})
+        }
 
 
     }
@@ -137,6 +145,6 @@ class SceneNiveau1 extends Phaser.Scene {
         this.player.body.y = 2750;
     }
     prochainNiveau() {
-        this.scene.start('SceneNiveau2')
+        this.scene.start('SceneNiveau2', {noisettes : this.noisettes})
     }
 }

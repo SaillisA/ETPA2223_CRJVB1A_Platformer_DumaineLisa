@@ -4,19 +4,17 @@ class SceneNiveau3 extends Phaser.Scene {
         this.player;
         this.controller = false;
         this.tileset;
-        this.noisettes = 10;
         //grimpe
         this.grimeBool = false;
-        //cachette
-        this.cacheBool = false;
-        this.cacher = false;
         //lance noisettes
         this.noisettesCD = false;
         this.directionPlayer = "";
 
     }
     init(data) {
-
+        this.noisettes = data.noisettes
+        this.positionX = data.positionX
+        this.positionY = data.positionY
     }
     preload() {
     }
@@ -43,7 +41,7 @@ class SceneNiveau3 extends Phaser.Scene {
         this.calqueTroncNiv3.setCollisionByProperty({ estSolide: true })
 
 
-        this.player = this.physics.add.sprite(192, 3212, 'perso');
+        this.player = this.physics.add.sprite(this.positionX, this.positionY, 'perso');
         this.player.setSize(230, 130)
         this.player.setOffset(165, 75)
 
@@ -53,12 +51,44 @@ class SceneNiveau3 extends Phaser.Scene {
 
 
         //calques objet
+        //vide qui nous mène au niveau3.2
+        this.videNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
+        this.objetVideNiv3 = this.carteDuNiv3.getObjectLayer("vide");
+        this.objetVideNiv3.objects.forEach(objetVideNiv3 => {
+            this.inutile = this.videNiv3.create(objetVideNiv3.x + 4480, objetVideNiv3.y + 128, "imgInvisibleLong");
+        });
+        //nous mene au prochain niveau (le 4)
+        this.sortieNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
+        this.objetSortieNiv3 = this.carteDuNiv3.getObjectLayer("sortie");
+        this.objetSortieNiv3.objects.forEach(objetSortieNiv3 => {
+            this.inutile = this.sortieNiv3.create(objetSortieNiv3.x, objetSortieNiv3.y, "imgInvisibleHaut");
+        });
+        //sortie qui mène au niveau 3.2 (si le joueur a envie d'y retourner)
+        this.sortieAlternativeNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
+        this.objetSortieAlternativeNiv3 = this.carteDuNiv3.getObjectLayer("sortieAlternative");
+        this.objetSortieAlternativeNiv3.objects.forEach(objetSortieAlternativeNiv3 => {
+            this.inutile = this.sortieAlternativeNiv3.create(objetSortieAlternativeNiv3.x, objetSortieAlternativeNiv3.y, "imgInvisibleLarge");
+        });
+        //objets du pont qui s'effondre quand le joueur marche dessus.
+        this.pontNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
+        this.objetPontNiv3 = this.carteDuNiv3.getObjectLayer("pont");
+        this.objetPontNiv3.objects.forEach(objetPontNiv3 => {
+            this.inutile = this.pontNiv3.create(objetPontNiv3.x+192, objetPontNiv3.y+64, "imgPont");
+        });
 
 
         this.physics.add.collider(this.player, this.calqueMurNiv3);
         this.physics.add.collider(this.player, this.calqueTroncNiv3, this.verifGrimpette, null, this);
+        this.physics.add.collider(this.player, this.objetVideNiv3, this.tomberVide, null, this);
+        this.physics.add.collider(this.player, this.objetSortieNiv3, this.prochaineScene, null, this);
+        this.physics.add.collider(this.player, this.objetSortieAlternativeNiv3, this.sceneAlternative, null, this);
+        this.physics.add.collider(this.player, this.pontNiv3, this.effondrementPont, null, this);
+
         //noisettes
         this.nutt = this.physics.add.group();
+        this.physics.add.collider(this.nutt, this.calqueMurNiv3);
+        this.physics.add.collider(this.nutt, this.calqueTroncNiv3);
+        this.physics.add.overlap(this.player, this.nutt, this.recupNutt, null, this)
     }
 
     update() {
@@ -106,6 +136,7 @@ class SceneNiveau3 extends Phaser.Scene {
             console.log("grimpette")
             this.player.setVelocityY(-1000);
         }
+        this.grimeBool = false;
 
         //lancer noisettes
         if (this.keyA.isDown && this.noisettes > 0 && this.noisettesCD == false || this.controller.A && this.noisettes > 0 && this.noisettesCD == false) {
@@ -126,18 +157,8 @@ class SceneNiveau3 extends Phaser.Scene {
             this.noisettesCD = true;
             this.time.delayedCall(500, this.resertNoisettesCD, [], this);
         }
-        //cachette
-        if (this.keyZ.isDown && this.cacheBool == true) {
-            console.log("cacher")
-            this.player.setVisible(false);
-            this.cacher = true;
-        }
-        this.grimeBool = false;
-        this.cacheBool = false;
 
         //Monstres
-
-
 
     }
     verifGrimpette() {
@@ -147,10 +168,6 @@ class SceneNiveau3 extends Phaser.Scene {
     resertNoisettesCD() {
         console.log("lancer de noisettes disponibles")
         this.noisettesCD = false;
-    }
-    cachetteBool() {
-        console.log("cachette possible")
-        this.cacheBool = true;
     }
 
     recupNutt(player, nutt) {
@@ -162,4 +179,16 @@ class SceneNiveau3 extends Phaser.Scene {
         }
     }
 
+    tomberVide() {
+        this.scene.start('sceneNiveau3.2', { noisettes: this.noisettes, positionX: this.player.body.x, positionY: 0 })
+    }
+    prochaineScene() {
+        this.scene.start('sceneNiveau4', { noisettes: this.noisettes })
+    }
+    sceneAlternative() {
+        this.scene.start('sceneNiveau3.2', { noisettes: this.noisettes, positionX: 1, positionY: 2 })
+    }
+    effondrementPont(player,pont) {
+        pont.body.setAllowGravity(true);
+    }
 }

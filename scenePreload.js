@@ -16,6 +16,7 @@ class ScenePreload extends Phaser.Scene {
         this.load.image('imgInvisible', 'assets/trans.png');
         this.load.image('imgInvisibleLong', 'assets/transLong.png')
         this.load.image('imgInvisibleHaut', 'assets/transHauteur.png')
+        this.load.image('imgInvisibleLarge', 'assets/transLargeur.png')
         this.load.image('imgInvisibleRangeOiseau', 'assets/transRange.png')
         this.load.image('imgTrouCachette', 'assets/cache.png')
         this.load.image('imgTrouCachetteMonstre', 'assets/cacheMonstre.png')
@@ -28,6 +29,7 @@ class ScenePreload extends Phaser.Scene {
         this.load.tilemapTiledJSON("carteNiveau2", "assets/maps/carteTiledNiveau2.json");
         //preload du niveau 3
         this.load.tilemapTiledJSON("carteNiveau3", "assets/maps/carteTiledNiveau3.json");
+        this.load.image('imgPont', 'assets/pontEn3.png')
     }
     create() {
 

@@ -172,7 +172,7 @@ class SceneTest extends Phaser.Scene {
 
 
         if (this.cursors.down.isDown) {
-            this.scene.start("SceneNiveau3")
+            this.scene.start("SceneNiveau1")
         }
     }
 
