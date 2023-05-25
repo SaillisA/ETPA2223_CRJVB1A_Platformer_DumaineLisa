@@ -1,6 +1,6 @@
-class SceneNiveau3 extends Phaser.Scene {
+class SceneNiveau32 extends Phaser.Scene {
     constructor() {
-        super("SceneNiveau3")
+        super("SceneNiveau32")
         this.player;
         this.controller = false;
         this.tileset;
@@ -28,17 +28,18 @@ class SceneNiveau3 extends Phaser.Scene {
         //flèches directionnelles pour se déplacer a gauche et a droite
         this.noisettesCD = false;
 
-        this.carteDuNiv3 = this.add.tilemap("carteNiveau3");
-        this.tileset = this.carteDuNiv3.addTilesetImage("tileset", "phaserTileset");
+        this.carteDuNiv32 = this.add.tilemap("carteNiveau32 ");
+        this.tileset = this.carteDuNiv32.addTilesetImage("tileset", "phaserTileset");
 
-        this.calqueFondNiv3 = this.carteDuNiv3.createLayer("fonds", this.tileset);
-        this.calqueBranchesNiv3 = this.carteDuNiv3.createLayer("branches", this.tileset)
+        this.calqueFondNiv32 = this.carteDuNiv32.createLayer("fonds", this.tileset);
 
-        this.calqueMurNiv3 = this.carteDuNiv3.createLayer("mur", this.tileset);
-        this.calqueMurNiv3.setCollisionByProperty({ estSolide: true });
+        this.calqueBranchesNiv32 = this.carteDuNiv32.createLayer("branches", this.tileset)
 
-        this.calqueTroncNiv3 = this.carteDuNiv3.createLayer("tronc", this.tileset);
-        this.calqueTroncNiv3.setCollisionByProperty({ estSolide: true })
+        this.calqueMurNiv32 = this.carteDuNiv32.createLayer("mur", this.tileset);
+        this.calqueMurNiv32.setCollisionByProperty({ estSolide: true });
+
+        this.calqueTroncNiv32 = this.carteDuNiv32.createLayer("tronc", this.tileset);
+        this.calqueTroncNiv32.setCollisionByProperty({ estSolide: true })
 
         this.player = this.physics.add.sprite(this.positionX, this.positionY, 'perso');
         this.player.setSize(230, 130)
@@ -48,55 +49,20 @@ class SceneNiveau3 extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, 8960, 4608);
         this.cameras.main.setZoom(0.2);
 
-
-        //calques objet
-        //vide qui nous mène au niveau3.2
-        this.videNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetVideNiv3 = this.carteDuNiv3.getObjectLayer("vide");
-        this.objetVideNiv3.objects.forEach(objetVideNiv3 => {
-            this.inutile = this.videNiv3.create(objetVideNiv3.x + 4480, objetVideNiv3.y + 128, "imgInvisibleLong");
-        });
-        //nous mene au prochain niveau (le 4)
-        this.sortieNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetSortieNiv3 = this.carteDuNiv3.getObjectLayer("sortie");
-        this.objetSortieNiv3.objects.forEach(objetSortieNiv3 => {
-            this.inutile = this.sortieNiv3.create(objetSortieNiv3.x, objetSortieNiv3.y, "imgInvisibleHaut");
-        });
-        //sortie qui mène au niveau 3.2 (si le joueur a envie d'y retourner)
-        this.sortieAlternativeNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetSortieAlternativeNiv3 = this.carteDuNiv3.getObjectLayer("sortieAlternative");
-        this.objetSortieAlternativeNiv3.objects.forEach(objetSortieAlternativeNiv3 => {
-            this.inutile = this.sortieAlternativeNiv3.create(objetSortieAlternativeNiv3.x, objetSortieAlternativeNiv3.y, "imgInvisibleLarge");
-        });
-        //objets du pont qui s'effondre quand le joueur marche dessus.
-        this.pontNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetPontNiv3 = this.carteDuNiv3.getObjectLayer("pont");
-        this.objetPontNiv3.objects.forEach(objetPontNiv3 => {
-            this.inutile = this.pontNiv3.create(objetPontNiv3.x+192, objetPontNiv3.y+64, "imgPont");
-        });
-        //mur qui se casse par en dessous
-        this.fragileNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetFragileNiv3 = this.carteDuNiv3.getObjectLayer("fragile");
-        this.objetFragileNiv3.objects.forEach(objetFragileNiv3 => {
-            this.inutile = this.fragileNiv3.create(objetFragileNiv3.x+192, objetFragileNiv3.y+64, "imgPont");
-        });
+        //calques objets
 
 
-        this.physics.add.collider(this.player, this.calqueMurNiv3);
-        this.physics.add.collider(this.player, this.calqueTroncNiv3, this.verifGrimpette, null, this);
-        this.physics.add.collider(this.player, this.objetVideNiv3, this.tomberVide, null, this);
-        this.physics.add.collider(this.player, this.objetSortieNiv3, this.prochaineScene, null, this);
-        this.physics.add.collider(this.player, this.objetSortieAlternativeNiv3, this.sceneAlternative, null, this);
-        this.physics.add.collider(this.player, this.pontNiv3, this.effondrementPont, null, this);
-        this.physics.add.collider(this.player, this.fragileNiv3);
-        
+        //colliders
+        this.physics.add.collider(this.player, this.calqueMurNiv32);
+        this.physics.add.collider(this.player, this.calqueTroncNiv32, this.verifGrimpette, null, this);
+
+        //overlaps
 
         //noisettes
         this.nutt = this.physics.add.group();
-        this.physics.add.collider(this.nutt, this.calqueMurNiv3);
-        this.physics.add.collider(this.nutt, this.calqueTroncNiv3);
+        this.physics.add.collider(this.nutt, this.calqueMurNiv32);
+        this.physics.add.collider(this.nutt, this.calqueTroncNiv32);
         this.physics.add.overlap(this.player, this.nutt, this.recupNutt, null, this)
-        this.physics.add.collider(this.nutt, this.fragileNiv3, this.casserFragile,null,this);
     }
 
     update() {
@@ -165,11 +131,7 @@ class SceneNiveau3 extends Phaser.Scene {
             this.noisettesCD = true;
             this.time.delayedCall(500, this.resertNoisettesCD, [], this);
         }
-        if (this.cursors.down.isDown) {
-            this.scene.start("SceneNiveau32",{noisettes : this.noisettes, positionX :192, positionY : 3212})
-        }
 
-        //Monstres
 
     }
     verifGrimpette() {
@@ -187,25 +149,6 @@ class SceneNiveau3 extends Phaser.Scene {
             nutt.destroy();
             this.noisettes += 1;
             console.log(this.noisettes)
-        }
-    }
-
-    tomberVide() {
-        this.scene.start('sceneNiveau32', { noisettes: this.noisettes, positionX: this.player.body.x, positionY: 0 })
-    }
-    prochaineScene() {
-        this.scene.start('sceneNiveau4', { noisettes: this.noisettes })
-    }
-    sceneAlternative() {
-        this.scene.start('sceneNiveau32', { noisettes: this.noisettes, positionX: 1, positionY: 2 })
-    }
-    effondrementPont(player,pont) {
-        pont.body.setAllowGravity(true);
-    }
-    casserFragile(nutt,bloc){
-        if(bloc.body.touching.down){
-            bloc.destroy()
-            nutt.destroy()
         }
     }
 }
