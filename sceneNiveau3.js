@@ -20,12 +20,14 @@ class SceneNiveau3 extends Phaser.Scene {
     }
     create() {
         //creation des touches
-        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);    //lancer noisettes
-        this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);    //se cacher
-        this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);    //interaction
+        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);    //lancer noisettes  
+        this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);    //se cacher
+        this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);  
+        this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);    //aller a gauche
+        this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);  
+        this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);    //aller a droite
         this.cursors = this.input.keyboard.createCursorKeys();
         //la barre est utilisé pour le saut
-        //flèches directionnelles pour se déplacer a gauche et a droite
         this.noisettesCD = false;
 
         this.carteDuNiv3 = this.add.tilemap("carteNiveau3");
@@ -60,7 +62,7 @@ class SceneNiveau3 extends Phaser.Scene {
         this.sortieNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
         this.objetSortieNiv3 = this.carteDuNiv3.getObjectLayer("sortie");
         this.objetSortieNiv3.objects.forEach(objetSortieNiv3 => {
-            this.inutile = this.sortieNiv3.create(objetSortieNiv3.x, objetSortieNiv3.y, "imgInvisibleHaut");
+            this.inutile = this.sortieNiv3.create(objetSortieNiv3.x, objetSortieNiv3.y+320, "imgInvisibleHaut");
         });
         //sortie qui mène au niveau 3.2 (si le joueur a envie d'y retourner)
         this.sortieAlternativeNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
@@ -86,7 +88,7 @@ class SceneNiveau3 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.calqueTroncNiv3, this.verifGrimpette, null, this);
         this.physics.add.collider(this.player, this.videNiv3, this.tomberVide, null, this);
         this.physics.add.collider(this.player, this.objetSortieNiv3, this.prochaineScene, null, this);
-        this.physics.add.collider(this.player, this.objetSortieAlternativeNiv3, this.sceneAlternative, null, this);
+        this.physics.add.collider(this.player, this.sortieAlternativeNiv3, this.sceneAlternative, null, this);
         this.physics.add.collider(this.player, this.pontNiv3, this.effondrementPont, null, this);
         this.physics.add.collider(this.player, this.fragileNiv3);
         
@@ -100,7 +102,7 @@ class SceneNiveau3 extends Phaser.Scene {
     }
 
     update() {
-        if (this.cursors.left.isDown || this.controller.left) { //si la touche gauche est appuyée
+        if (this.keyQ.isDown || this.controller.left) { //si la touche gauche est appuyée
             if (this.cacher == true) {
                 console.log("plus cacher")
                 this.player.setVisible(true);
@@ -108,16 +110,14 @@ class SceneNiveau3 extends Phaser.Scene {
 
             }
             this.player.setVelocityX(-1000); //alors vitesse négative en X
-            this.directionPlayer = "left"
         }
-        else if (this.cursors.right.isDown || this.controller.right) { //sinon si la touche droite est appuyée
+        else if (this.keyD.isDown || this.controller.right) { //sinon si la touche droite est appuyée
             if (this.cacher == true) {
                 console.log("plus cacher")
                 this.player.setVisible(true);
                 this.cacher = false;
             }
             this.player.setVelocityX(1000); //alors vitesse positive en X
-            this.directionPlayer = "right"
         }
         else {
             this.player.setVelocityX(0)
@@ -125,26 +125,31 @@ class SceneNiveau3 extends Phaser.Scene {
         if (this.cursors.up.isDown || this.controller.up) {
             this.directionPlayer = "up"
         }
+        if (this.cursors.left.isDown || this.controller.up) {
+            this.directionPlayer = "left"
+        }
+        if (this.cursors.right.isDown || this.controller.up) {
+            this.directionPlayer = "right"
+        }
 
         //saut
         if (this.cursors.space.isDown && this.player.body.blocked.down || this.controller.B && this.player.body.blocked.down) {
-            if (this.cacher == true) {
-                console.log("plus cacher")
-                this.player.setVisible(true);
-                this.cacher = false;
-            }
             console.log("sautette")
-            this.player.setVelocityY(-1300);
-        }
-        if (this.cursors.space.isDown && this.player.body.right && this.grimeBool == true || this.controller.B && this.player.body.right && this.grimeBool == true) {
-            console.log("grimpette")
             this.player.setVelocityY(-1000);
+        }
+        if (this.player.body.right && this.grimeBool == true || this.controller.B && this.player.body.right && this.grimeBool == true) {
+            console.log("grimpette")
+            if(this.keyZ.isDown){
+            this.player.setVelocityY(-1000);
+            }
+            if(this.keyS.isDown){
+                this.player.setVelocityY(1000)
+            }
         }
         if (this.cursors.space.isDown && this.player.body.blocked.left && this.grimeBool == true || this.cursors.B && this.player.body.blocked.left && this.grimeBool == true) {
             console.log("grimpette")
             this.player.setVelocityY(-1000);
         }
-        this.grimeBool = false;
 
         //lancer noisettes
         if (this.keyA.isDown && this.noisettes > 0 && this.noisettesCD == false || this.controller.A && this.noisettes > 0 && this.noisettesCD == false) {
@@ -165,9 +170,21 @@ class SceneNiveau3 extends Phaser.Scene {
             this.noisettesCD = true;
             this.time.delayedCall(500, this.resertNoisettesCD, [], this);
         }
-        /*if (this.cursors.down.isDown) {
-            this.scene.start("SceneNiveau3bis",{noisettes : this.noisettes, positionX :2106, positionY : 58})
-        }*/
+        if (this.cursors.down.isDown) {
+            this.scene.start("SceneNiveau2", {noisettes : this.noisettes})
+        }
+        //cachette
+        if (this.keyE.isDown && this.cacheBool == true) {
+            console.log("cacher")
+            this.player.setVisible(false);
+            this.cacher = true;
+        }
+        this.grimeBool = false;
+        this.cacheBool = false;
+
+        if (this.cursors.down.isDown) {
+            this.scene.start("SceneNiveau3bis",{noisettes : this.noisettes, positionX :2118, positionY : 236})
+        }
 
         //Monstres
 
@@ -197,7 +214,7 @@ class SceneNiveau3 extends Phaser.Scene {
         this.scene.start('SceneNiveau4', { noisettes: this.noisettes })
     }
     sceneAlternative() {
-        this.scene.start('SceneNiveau3bis', { noisettes: this.noisettes, positionX: 2106, positionY: 58 })
+        this.scene.start('SceneNiveau3bis', { noisettes: this.noisettes, positionX: 2118, positionY: 236 })
     }
     effondrementPont(player,pont) {
         pont.body.setAllowGravity(true);
