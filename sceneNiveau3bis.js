@@ -1,6 +1,6 @@
-class SceneNiveau32 extends Phaser.Scene {
+class SceneNiveau3bis extends Phaser.Scene {
     constructor() {
-        super("SceneNiveau32")
+        super("SceneNiveau3bis")
         this.player;
         this.controller = false;
         this.tileset;
@@ -28,18 +28,18 @@ class SceneNiveau32 extends Phaser.Scene {
         //flèches directionnelles pour se déplacer a gauche et a droite
         this.noisettesCD = false;
 
-        this.carteDuNiv32 = this.add.tilemap("carteNiveau32 ");
-        this.tileset = this.carteDuNiv32.addTilesetImage("tileset", "phaserTileset");
+        this.carteDuNiv3bis = this.add.tilemap("carteNiveau3bis");
+        this.tileset = this.carteDuNiv3bis.addTilesetImage("tileset", "phaserTileset");
 
-        this.calqueFondNiv32 = this.carteDuNiv32.createLayer("fonds", this.tileset);
+        this.calqueFondNiv3bis = this.carteDuNiv3bis.createLayer("fond", this.tileset);
 
-        this.calqueBranchesNiv32 = this.carteDuNiv32.createLayer("branches", this.tileset)
+        this.calqueBranchesNiv3bis = this.carteDuNiv3bis.createLayer("branches", this.tileset)
 
-        this.calqueMurNiv32 = this.carteDuNiv32.createLayer("mur", this.tileset);
-        this.calqueMurNiv32.setCollisionByProperty({ estSolide: true });
+        this.calqueMurNiv3bis = this.carteDuNiv3bis.createLayer("mur", this.tileset);
+        this.calqueMurNiv3bis.setCollisionByProperty({ estSolide: true });
 
-        this.calqueTroncNiv32 = this.carteDuNiv32.createLayer("tronc", this.tileset);
-        this.calqueTroncNiv32.setCollisionByProperty({ estSolide: true })
+        this.calqueTroncNiv3bis = this.carteDuNiv3bis.createLayer("tronc", this.tileset);
+        this.calqueTroncNiv3bis.setCollisionByProperty({ estSolide: true });
 
         this.player = this.physics.add.sprite(this.positionX, this.positionY, 'perso');
         this.player.setSize(230, 130)
@@ -50,18 +50,23 @@ class SceneNiveau32 extends Phaser.Scene {
         this.cameras.main.setZoom(0.2);
 
         //calques objets
+        this.sortieNiv3bis = this.physics.add.group({ immovable: true, allowGravity: false });
+        this.objetSortieNiv3bis = this.carteDuNiv3bis.getObjectLayer("sortie");
+        this.objetSortieNiv3bis.objects.forEach(objetSortieNiv3bis => {
+            this.inutile = this.sortieNiv3bis.create(objetSortieNiv3bis.x, objetSortieNiv3bis.y, "imgInvisibleHaut");
+        });
 
 
         //colliders
-        this.physics.add.collider(this.player, this.calqueMurNiv32);
-        this.physics.add.collider(this.player, this.calqueTroncNiv32, this.verifGrimpette, null, this);
+        this.physics.add.collider(this.player, this.calqueMurNiv3bis);
+        this.physics.add.collider(this.player, this.calqueTroncNiv3bis, this.verifGrimpette, null, this);
 
         //overlaps
-
+        this.physics.add.overlap(this.player, this.sortieNiv3bis, this.retourNiveau3,null,this)
         //noisettes
         this.nutt = this.physics.add.group();
-        this.physics.add.collider(this.nutt, this.calqueMurNiv32);
-        this.physics.add.collider(this.nutt, this.calqueTroncNiv32);
+        this.physics.add.collider(this.nutt, this.calqueMurNiv3bis);
+        this.physics.add.collider(this.nutt, this.calqueTroncNiv3bis);
         this.physics.add.overlap(this.player, this.nutt, this.recupNutt, null, this)
     }
 
@@ -150,5 +155,9 @@ class SceneNiveau32 extends Phaser.Scene {
             this.noisettes += 1;
             console.log(this.noisettes)
         }
+    }
+
+    retourNiveau3(){
+        this.scene.start("SceneNiveau3",{noisettes : this.noisettes, positionX :2430, positionY : 4430})
     }
 }

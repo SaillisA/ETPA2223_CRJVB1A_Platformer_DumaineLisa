@@ -182,9 +182,9 @@ class SceneNiveau2 extends Phaser.Scene {
 
         //Monstres
 
-        if (this.cursors.down.isDown) {
+        /*if (this.cursors.down.isDown) {
             this.scene.start("SceneNiveau3",{noisettes : this.noisettes, positionX :192, positionY : 3212})
-        }
+        }*/
 
     }
     verifGrimpette() {
@@ -220,7 +220,7 @@ class SceneNiveau2 extends Phaser.Scene {
         this.player.body.y = 1620;
     }
     prochainNiveau(){
-        this.scene.start('sceneNiveau3',{noisettes : this.noisettes, positionX :192, positionY : 3212})
+        this.scene.start("SceneNiveau3",{noisettes : this.noisettes, positionX :192, positionY : 3212})
     }
 
 }

@@ -122,9 +122,9 @@ class SceneNiveau1 extends Phaser.Scene {
             this.noisettesCD = true;
             this.time.delayedCall(500, this.resertNoisettesCD, [], this);
         }
-        if (this.cursors.down.isDown) {
+        /*if (this.cursors.down.isDown) {
             this.scene.start("SceneNiveau2", {noisettes : this.noisettes})
-        }
+        }*/
 
 
     }

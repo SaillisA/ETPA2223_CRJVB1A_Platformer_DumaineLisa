@@ -50,11 +50,11 @@ class SceneNiveau3 extends Phaser.Scene {
 
 
         //calques objet
-        //vide qui nous mène au niveau3.2
+        //vide qui nous mène au niveau3bis
         this.videNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
         this.objetVideNiv3 = this.carteDuNiv3.getObjectLayer("vide");
         this.objetVideNiv3.objects.forEach(objetVideNiv3 => {
-            this.inutile = this.videNiv3.create(objetVideNiv3.x + 4480, objetVideNiv3.y + 128, "imgInvisibleLong");
+            this.inutile = this.videNiv3.create(objetVideNiv3.x + 4480, objetVideNiv3.y , "imgInvisibleLong");
         });
         //nous mene au prochain niveau (le 4)
         this.sortieNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
@@ -84,7 +84,7 @@ class SceneNiveau3 extends Phaser.Scene {
 
         this.physics.add.collider(this.player, this.calqueMurNiv3);
         this.physics.add.collider(this.player, this.calqueTroncNiv3, this.verifGrimpette, null, this);
-        this.physics.add.collider(this.player, this.objetVideNiv3, this.tomberVide, null, this);
+        this.physics.add.collider(this.player, this.videNiv3, this.tomberVide, null, this);
         this.physics.add.collider(this.player, this.objetSortieNiv3, this.prochaineScene, null, this);
         this.physics.add.collider(this.player, this.objetSortieAlternativeNiv3, this.sceneAlternative, null, this);
         this.physics.add.collider(this.player, this.pontNiv3, this.effondrementPont, null, this);
@@ -165,9 +165,9 @@ class SceneNiveau3 extends Phaser.Scene {
             this.noisettesCD = true;
             this.time.delayedCall(500, this.resertNoisettesCD, [], this);
         }
-        if (this.cursors.down.isDown) {
-            this.scene.start("SceneNiveau32",{noisettes : this.noisettes, positionX :192, positionY : 3212})
-        }
+        /*if (this.cursors.down.isDown) {
+            this.scene.start("SceneNiveau3bis",{noisettes : this.noisettes, positionX :2106, positionY : 58})
+        }*/
 
         //Monstres
 
@@ -191,13 +191,13 @@ class SceneNiveau3 extends Phaser.Scene {
     }
 
     tomberVide() {
-        this.scene.start('sceneNiveau32', { noisettes: this.noisettes, positionX: this.player.body.x, positionY: 0 })
+        this.scene.start('SceneNiveau3bis', { noisettes: this.noisettes, positionX: this.player.body.x, positionY: 0 })
     }
     prochaineScene() {
-        this.scene.start('sceneNiveau4', { noisettes: this.noisettes })
+        this.scene.start('SceneNiveau4', { noisettes: this.noisettes })
     }
     sceneAlternative() {
-        this.scene.start('sceneNiveau32', { noisettes: this.noisettes, positionX: 1, positionY: 2 })
+        this.scene.start('SceneNiveau3bis', { noisettes: this.noisettes, positionX: 2106, positionY: 58 })
     }
     effondrementPont(player,pont) {
         pont.body.setAllowGravity(true);
