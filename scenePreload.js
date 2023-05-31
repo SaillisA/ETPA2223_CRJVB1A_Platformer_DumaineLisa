@@ -7,12 +7,15 @@ class ScenePreload extends Phaser.Scene {
     }
     preload() {
         //preload de la scene de test
-        this.load.image('perso', 'assets/perso.png');
+        //this.load.image('perso', 'assets/perso.png');
         this.load.image("phaserTilesetTest", "assets/maps/tilesetTest.png");
         this.load.tilemapTiledJSON("carteTest", "assets/maps/testotest.json");
         this.load.image('imgNutt', 'assets/noisettes.png')
 
         //divers
+        this.load.spritesheet('persoDroite','assets/spriteEcureuilDroite.png', {frameWidth: 400, frameHeight: 321});
+        this.load.spritesheet('persoGauche','assets/spriteEcureuilGauche.png', {frameWidth: 400, frameHeight: 321});
+
         this.load.image('imgInvisible', 'assets/trans.png');
         this.load.image('imgInvisibleLong', 'assets/transLong.png')
         this.load.image('imgInvisibleHaut', 'assets/transHauteur.png')
@@ -34,7 +37,18 @@ class ScenePreload extends Phaser.Scene {
         this.load.tilemapTiledJSON("carteNiveau3bis", "assets/maps/carteTiledNiveau3bis.json");
     }
     create() {
-
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('persoDroite', {start:0,end:5}),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('persoGauche', {start:0,end:5}),
+            frameRate: 10,
+            repeat: -1
+        });
     }
     update() {
         this.scene.start('SceneTest')

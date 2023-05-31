@@ -5,9 +5,13 @@ class SceneNiveau1 extends Phaser.Scene {
         this.controller = false;
         this.tileset;
         this.noisettes = 10
+        //grimpe
+        this.grimeBool = false;
         //lance noisettes
         this.noisettesCD = false;
         this.directionPlayer = "";
+        //animation
+        this.aninim = ''            //pour déterminer dans quelle direction sera son anim d'attente
     }
     init(data) {
 
@@ -37,11 +41,12 @@ class SceneNiveau1 extends Phaser.Scene {
         this.calqueBranchesNiv1 = this.carteDuNiv1.createLayer("branches", this.tileset)
         this.calqueMurNiv1 = this.carteDuNiv1.createLayer("mur", this.tileset);
         this.calqueMurNiv1.setCollisionByProperty({ estSolide: true });
-
+        this.calqueTroncNiv1 = this.carteDuNiv1.createLayer("tronc", this.tileset)
+        this.calqueTroncNiv1.setCollisionByProperty({ estSolide: true });
 
         this.player = this.physics.add.sprite(312, 2750, 'perso');
-        this.player.setSize(230, 130)
-        this.player.setOffset(165, 75)
+        this.player.setSize(250, 130)
+        this.player.setOffset(140, 180)
 
         this.physics.world.setBounds(0, 0, 8960, 4608);
         this.cameras.main.setBounds(0, 0, 8960, 4608);
@@ -69,6 +74,7 @@ class SceneNiveau1 extends Phaser.Scene {
 
         //collider :
         this.physics.add.collider(this.player, this.calqueMurNiv1);
+        this.physics.add.collider(this.player, this.calqueTroncNiv1, this.verifGrimpette, null, this);
 
         //overlap :
         this.physics.add.collider(this.player, this.vide, this.teleportationVide, null, this);
@@ -84,6 +90,10 @@ class SceneNiveau1 extends Phaser.Scene {
 
             }
             this.player.setVelocityX(-1000); //alors vitesse négative en X
+            this.player.setSize(250, 130)
+            this.player.setOffset(10, 180)
+            this.player.anims.playReverse('left', true); //et animation => gauche
+            this.aninim = 'gauche'
         }
         else if (this.keyD.isDown || this.controller.right) { //sinon si la touche droite est appuyée
             if (this.cacher == true) {
@@ -92,9 +102,19 @@ class SceneNiveau1 extends Phaser.Scene {
                 this.cacher = false;
             }
             this.player.setVelocityX(1000); //alors vitesse positive en X
+            this.player.setSize(250, 130)
+            this.player.setOffset(140, 180)
+            this.player.anims.play('right', true); //et animation => droite
+            this.aninim = 'droite'
         }
         else {
             this.player.setVelocityX(0)
+            if(this.aninim == 'gauche'){
+
+            }
+            if(this.aninim == 'droite'){
+
+            }
         }
         if (this.cursors.up.isDown || this.controller.up) {
             this.directionPlayer = "up"
@@ -109,6 +129,20 @@ class SceneNiveau1 extends Phaser.Scene {
         //saut
         if (this.cursors.space.isDown && this.player.body.blocked.down || this.controller.B && this.player.body.blocked.down) {
             console.log("sautette")
+            this.player.setVelocityY(-1000);
+        }
+        //grimpette
+        if (this.player.body.right && this.grimeBool == true || this.controller.B && this.player.body.right && this.grimeBool == true) {
+            console.log("grimpette")
+            if(this.keyZ.isDown){
+            this.player.setVelocityY(-1000);
+            }
+            if(this.keyS.isDown){
+                this.player.setVelocityY(1000)
+            }
+        }
+        if (this.cursors.space.isDown && this.player.body.blocked.left && this.grimeBool == true || this.cursors.B && this.player.body.blocked.left && this.grimeBool == true) {
+            console.log("grimpette")
             this.player.setVelocityY(-1000);
         }
         //lancer noisettes
@@ -133,8 +167,13 @@ class SceneNiveau1 extends Phaser.Scene {
         if (this.cursors.down.isDown) {
             this.scene.start("SceneNiveau2", {noisettes : this.noisettes})
         }
+        this.grimeBool = false;
 
 
+    }
+    verifGrimpette() {
+        console.log("verifgrimpette")
+        this.grimeBool = true;
     }
     resertNoisettesCD() {
         console.log("lancer de noisettes disponibles")

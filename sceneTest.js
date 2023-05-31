@@ -65,8 +65,8 @@ class SceneTest extends Phaser.Scene {
         });
 
         this.player = this.physics.add.sprite(248, 1040, 'perso');
-        this.player.setSize(230, 130)
-        this.player.setOffset(165, 75)
+        this.player.setSize(250, 130)
+        this.player.setOffset(140, 180)
 
         this.cursors = this.input.keyboard.createCursorKeys();
         this.physics.world.setBounds(0, 0, 4096, 4096);
@@ -101,7 +101,11 @@ class SceneTest extends Phaser.Scene {
                 this.cacher = false;
 
             }
+            this.player.anims.playReverse('left', true); //et animation => gauche
+            this.player.setSize(250, 130)
+            this.player.setOffset(10, 180)
             this.player.setVelocityX(-500); //alors vitesse négative en X
+
             this.directionPlayer = "left"
         }
         else if (this.cursors.right.isDown || this.controller.right) { //sinon si la touche droite est appuyée
@@ -110,6 +114,9 @@ class SceneTest extends Phaser.Scene {
                 this.player.setVisible(true);
                 this.cacher = false;
             }
+            this.player.anims.play('right', true); //et animation => droite
+            this.player.setSize(250, 130)
+            this.player.setOffset(140, 180)
             this.player.setVelocityX(500); //alors vitesse positive en X
             this.directionPlayer = "right"
         }
