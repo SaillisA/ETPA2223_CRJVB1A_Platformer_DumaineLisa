@@ -38,6 +38,7 @@ class ScenePreload extends Phaser.Scene {
         this.load.tilemapTiledJSON("carteNiveau3bis", "assets/maps/carteTiledNiveau3bis.json");
         //preload du niveau 4
         this.load.tilemapTiledJSON("carteNiveau4", "assets/maps/carteTiledNiveau4.json");
+        this.load.image("imgCleFeuille","assets/cleFeuille.png")
         
     }
     create() {

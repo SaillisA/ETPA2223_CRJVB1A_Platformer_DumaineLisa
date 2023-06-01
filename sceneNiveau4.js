@@ -5,6 +5,7 @@ class SceneNiveau4 extends Phaser.Scene {
         this.controller = false;
         this.tileset;
         this.noisettes = 10
+        this.cle = 0;
         //grimpe
         this.grimeBool = false;
         //lance noisettes
@@ -42,6 +43,9 @@ class SceneNiveau4 extends Phaser.Scene {
         this.calqueTroncNiv4 = this.carteDuNiv4.createLayer("tronc", this.tileset);
         this.calqueTroncNiv4.setCollisionByProperty({ estSolide: true })
 
+        this.calquePorteNiv4 = this.carteDuNiv4.createLayer("porte", this.tileset);
+        this.calquePorteNiv4.setCollisionByProperty({ estSolide: true });
+
         //créationd du player
         this.player = this.physics.add.sprite(112, 1054, 'perso');
         this.player.setSize(250, 130)
@@ -51,13 +55,19 @@ class SceneNiveau4 extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, 8960, 4608);
         this.cameras.main.setBounds(0, 0, 8960, 4608);
         this.cameras.main.setZoom(0.2);
-
+        
         //calques objets
         //vide
         this.videNiv4 = this.physics.add.group({ immovable: true, allowGravity: false });
         this.objetVideNiv4 = this.carteDuNiv4.getObjectLayer("vide");
         this.objetVideNiv4.objects.forEach(objetVideNiv4 => {
             this.inutile = this.videNiv4.create(objetVideNiv4.x + 4480, objetVideNiv4.y + 128, "imgInvisibleLong");
+        });
+        //cle
+        this.cleNiv4 = this.physics.add.group({ immovable: true, allowGravity: false });
+        this.objetCleNiv4 = this.carteDuNiv4.getObjectLayer("cle");
+        this.objetCleNiv4.objects.forEach(objetCleNiv4 => {
+            this.inutile = this.cleNiv4.create(objetCleNiv4.x + 64, objetCleNiv4.y + 64, "imgCleFeuille");
         });
 
         //pour la noisettes
@@ -69,8 +79,11 @@ class SceneNiveau4 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.calqueMurNiv4);
         this.physics.add.collider(this.player, this.calqueTroncNiv4, this.verifGrimpette, null, this);
         this.physics.add.collider(this.player, this.videNiv4, this.teleportationVide, null, this);
+        this.collisionPorteNiv4 = this.physics.add.collider(this.player, this.calquePorteNiv4, this.ouverture, null, this);
 
+        
         //overlap
+        this.physics.add.overlap(this.player, this.cleNiv4, this.recupCle, null, this);
     }
 
     update() {
@@ -184,6 +197,16 @@ class SceneNiveau4 extends Phaser.Scene {
         this.player.body.x = 112;
         this.player.body.y = 1054;
     }
-
+    ouverture(){
+        if(this.cle == 6){
+            this.physics.world.removeCollider(this.collisionPorteNiv4)
+            this.calquePorteNiv4.setVisible(false);
+        }
+    }
+    recupCle(player,clecle){
+        this.cle += 1;
+        console.log(this.cle)
+        clecle.destroy()
+    }
 
 }
