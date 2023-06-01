@@ -677,9 +677,6 @@
  <objectgroup id="5" name="vide">
   <object id="5" x="2.66667" y="4592" width="8960" height="16"/>
  </objectgroup>
- <objectgroup id="20" name="sortieAlternative">
-  <object id="100" x="1920" y="4541.33" width="384" height="66.6667"/>
- </objectgroup>
  <objectgroup id="17" name="sortie">
   <object id="99" x="8908" y="384" width="52" height="640"/>
  </objectgroup>

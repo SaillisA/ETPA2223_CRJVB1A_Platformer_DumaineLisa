@@ -43,8 +43,8 @@ class SceneNiveau3 extends Phaser.Scene {
         this.calqueTroncNiv3.setCollisionByProperty({ estSolide: true })
 
         this.player = this.physics.add.sprite(this.positionX, this.positionY, 'perso');
-        this.player.setSize(230, 130)
-        this.player.setOffset(165, 75)
+        this.player.setSize(250, 130)
+        this.player.setOffset(140, 180)
 
         this.physics.world.setBounds(0, 0, 8960, 4608);
         this.cameras.main.setBounds(0, 0, 8960, 4608);
@@ -64,12 +64,6 @@ class SceneNiveau3 extends Phaser.Scene {
         this.objetSortieNiv3.objects.forEach(objetSortieNiv3 => {
             this.inutile = this.sortieNiv3.create(objetSortieNiv3.x, objetSortieNiv3.y+320, "imgInvisibleHaut");
         });
-        //sortie qui mène au niveau 3.2 (si le joueur a envie d'y retourner)
-        this.sortieAlternativeNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetSortieAlternativeNiv3 = this.carteDuNiv3.getObjectLayer("sortieAlternative");
-        this.objetSortieAlternativeNiv3.objects.forEach(objetSortieAlternativeNiv3 => {
-            this.inutile = this.sortieAlternativeNiv3.create(objetSortieAlternativeNiv3.x, objetSortieAlternativeNiv3.y, "imgInvisibleLarge");
-        });
         //objets du pont qui s'effondre quand le joueur marche dessus.
         this.pontNiv3 = this.physics.add.group({ immovable: true, allowGravity: false });
         this.objetPontNiv3 = this.carteDuNiv3.getObjectLayer("pont");
@@ -87,8 +81,7 @@ class SceneNiveau3 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.calqueMurNiv3);
         this.physics.add.collider(this.player, this.calqueTroncNiv3, this.verifGrimpette, null, this);
         this.physics.add.collider(this.player, this.videNiv3, this.tomberVide, null, this);
-        this.physics.add.collider(this.player, this.objetSortieNiv3, this.prochaineScene, null, this);
-        this.physics.add.collider(this.player, this.sortieAlternativeNiv3, this.sceneAlternative, null, this);
+        this.physics.add.collider(this.player, this.sortieNiv3, this.prochaineScene, null, this);
         this.physics.add.collider(this.player, this.pontNiv3, this.effondrementPont, null, this);
         this.physics.add.collider(this.player, this.fragileNiv3);
         
@@ -110,6 +103,10 @@ class SceneNiveau3 extends Phaser.Scene {
 
             }
             this.player.setVelocityX(-1000); //alors vitesse négative en X
+            this.player.setSize(250, 130)
+            this.player.setOffset(10, 180)
+            this.player.anims.playReverse('left', true); //et animation => gauche
+            this.aninim = 'gauche'
         }
         else if (this.keyD.isDown || this.controller.right) { //sinon si la touche droite est appuyée
             if (this.cacher == true) {
@@ -118,6 +115,10 @@ class SceneNiveau3 extends Phaser.Scene {
                 this.cacher = false;
             }
             this.player.setVelocityX(1000); //alors vitesse positive en X
+            this.player.setSize(250, 130)
+            this.player.setOffset(140, 180)
+            this.player.anims.play('right', true); //et animation => droite
+            this.aninim = 'droite'
         }
         else {
             this.player.setVelocityX(0)
@@ -170,9 +171,6 @@ class SceneNiveau3 extends Phaser.Scene {
             this.noisettesCD = true;
             this.time.delayedCall(500, this.resertNoisettesCD, [], this);
         }
-        if (this.cursors.down.isDown) {
-            this.scene.start("SceneNiveau2", {noisettes : this.noisettes})
-        }
         //cachette
         if (this.keyE.isDown && this.cacheBool == true) {
             console.log("cacher")
@@ -183,7 +181,7 @@ class SceneNiveau3 extends Phaser.Scene {
         this.cacheBool = false;
 
         if (this.cursors.down.isDown) {
-            this.scene.start("SceneNiveau3bis",{noisettes : this.noisettes, positionX :2118, positionY : 236})
+            this.scene.start("SceneNiveau4",{noisettes : this.noisettes})
         }
 
         //Monstres
@@ -212,9 +210,6 @@ class SceneNiveau3 extends Phaser.Scene {
     }
     prochaineScene() {
         this.scene.start('SceneNiveau4', { noisettes: this.noisettes })
-    }
-    sceneAlternative() {
-        this.scene.start('SceneNiveau3bis', { noisettes: this.noisettes, positionX: 2118, positionY: 236 })
     }
     effondrementPont(player,pont) {
         pont.body.setAllowGravity(true);

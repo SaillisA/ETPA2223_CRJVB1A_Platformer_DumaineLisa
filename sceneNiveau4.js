@@ -1,20 +1,20 @@
-class SceneNiveau3bis extends Phaser.Scene {
+class SceneNiveau4 extends Phaser.Scene {
     constructor() {
-        super("SceneNiveau3bis")
+        super("SceneNiveau4")
         this.player;
         this.controller = false;
         this.tileset;
+        this.noisettes = 10
         //grimpe
         this.grimeBool = false;
         //lance noisettes
         this.noisettesCD = false;
         this.directionPlayer = "";
-
+        //animation
+        this.aninim = ''            //pour déterminer dans quelle direction sera son anim d'attente
     }
     init(data) {
-        this.noisettes = data.noisettes
-        this.positionX = data.positionX
-        this.positionY = data.positionY
+
     }
     preload() {
     }
@@ -22,57 +22,59 @@ class SceneNiveau3bis extends Phaser.Scene {
         //creation des touches
         this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);    //lancer noisettes  
         this.keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);    //se cacher
-        this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);  
+        this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
         this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);    //aller a gauche
-        this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);  
+        this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);    //aller a droite
         this.cursors = this.input.keyboard.createCursorKeys();
         //la barre est utilisé pour le saut
-        this.noisettesCD = false;
+        //flèches directionnelles pour changer la direction du lancer de noisettes
 
-        this.carteDuNiv3bis = this.add.tilemap("carteNiveau3bis");
-        this.tileset = this.carteDuNiv3bis.addTilesetImage("tileset", "phaserTileset");
+        this.carteDuNiv4 = this.add.tilemap("carteNiveau4");
+        this.tileset = this.carteDuNiv4.addTilesetImage("tileset", "phaserTileset");
 
-        this.calqueFondNiv3bis = this.carteDuNiv3bis.createLayer("fond", this.tileset);
+        this.calqueFondNiv4 = this.carteDuNiv4.createLayer("fonds", this.tileset);
+        this.calqueBranchesNiv4 = this.carteDuNiv4.createLayer("branches", this.tileset)
 
-        this.calqueBranchesNiv3bis = this.carteDuNiv3bis.createLayer("branches", this.tileset)
+        this.calqueMurNiv4 = this.carteDuNiv4.createLayer("mur", this.tileset);
+        this.calqueMurNiv4.setCollisionByProperty({ estSolide: true });
 
-        this.calqueMurNiv3bis = this.carteDuNiv3bis.createLayer("mur", this.tileset);
-        this.calqueMurNiv3bis.setCollisionByProperty({ estSolide: true });
+        this.calqueTroncNiv4 = this.carteDuNiv4.createLayer("tronc", this.tileset);
+        this.calqueTroncNiv4.setCollisionByProperty({ estSolide: true })
 
-        this.calqueTroncNiv3bis = this.carteDuNiv3bis.createLayer("tronc", this.tileset);
-        this.calqueTroncNiv3bis.setCollisionByProperty({ estSolide: true });
-
-        this.player = this.physics.add.sprite(this.positionX, this.positionY, 'perso');
+        //créationd du player
+        this.player = this.physics.add.sprite(112, 1054, 'perso');
         this.player.setSize(250, 130)
         this.player.setOffset(140, 180)
 
+        //création de la caméra
         this.physics.world.setBounds(0, 0, 8960, 4608);
         this.cameras.main.setBounds(0, 0, 8960, 4608);
         this.cameras.main.setZoom(0.2);
 
         //calques objets
-        this.sortieNiv3bis = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetSortieNiv3bis = this.carteDuNiv3bis.getObjectLayer("sortie");
-        this.objetSortieNiv3bis.objects.forEach(objetSortieNiv3bis => {
-            this.inutile = this.sortieNiv3bis.create(objetSortieNiv3bis.x, objetSortieNiv3bis.y, "imgInvisibleLarge");
+        //vide
+        this.videNiv4 = this.physics.add.group({ immovable: true, allowGravity: false });
+        this.objetVideNiv4 = this.carteDuNiv4.getObjectLayer("vide");
+        this.objetVideNiv4.objects.forEach(objetVideNiv4 => {
+            this.inutile = this.videNiv4.create(objetVideNiv4.x + 4480, objetVideNiv4.y + 128, "imgInvisibleLong");
         });
 
-
-        //colliders
-        this.physics.add.collider(this.player, this.calqueMurNiv3bis);
-        this.physics.add.collider(this.player, this.calqueTroncNiv3bis, this.verifGrimpette, null, this);
-
-        //overlaps
-        this.physics.add.overlap(this.player, this.sortieNiv3bis, this.retourNiveau3,null,this)
-        //noisettes
+        //pour la noisettes
+        this.noisettesCD = false;
         this.nutt = this.physics.add.group();
-        this.physics.add.collider(this.nutt, this.calqueMurNiv3bis);
-        this.physics.add.collider(this.nutt, this.calqueTroncNiv3bis);
         this.physics.add.overlap(this.player, this.nutt, this.recupNutt, null, this)
+
+        //collider
+        this.physics.add.collider(this.player, this.calqueMurNiv4);
+        this.physics.add.collider(this.player, this.calqueTroncNiv4, this.verifGrimpette, null, this);
+        this.physics.add.collider(this.player, this.videNiv4, this.teleportationVide, null, this);
+
+        //overlap
     }
 
     update() {
+        //déplacements
         if (this.keyQ.isDown || this.controller.left) { //si la touche gauche est appuyée
             if (this.cacher == true) {
                 console.log("plus cacher")
@@ -100,7 +102,14 @@ class SceneNiveau3bis extends Phaser.Scene {
         }
         else {
             this.player.setVelocityX(0)
+            if (this.aninim == 'gauche') {
+
+            }
+            if (this.aninim == 'droite') {
+
+            }
         }
+        //direction noisettes
         if (this.cursors.up.isDown || this.controller.up) {
             this.directionPlayer = "up"
         }
@@ -116,12 +125,13 @@ class SceneNiveau3bis extends Phaser.Scene {
             console.log("sautette")
             this.player.setVelocityY(-1000);
         }
+        //grimpette
         if (this.player.body.right && this.grimeBool == true || this.controller.B && this.player.body.right && this.grimeBool == true) {
             console.log("grimpette")
-            if(this.keyZ.isDown){
-            this.player.setVelocityY(-1000);
+            if (this.keyZ.isDown) {
+                this.player.setVelocityY(-1000);
             }
-            if(this.keyS.isDown){
+            if (this.keyS.isDown) {
                 this.player.setVelocityY(1000)
             }
         }
@@ -129,7 +139,7 @@ class SceneNiveau3bis extends Phaser.Scene {
             console.log("grimpette")
             this.player.setVelocityY(-1000);
         }
-
+        this.grimeBool = false;
         //lancer noisettes
         if (this.keyA.isDown && this.noisettes > 0 && this.noisettesCD == false || this.controller.A && this.noisettes > 0 && this.noisettesCD == false) {
             console.log("condition pour lancer des noisettes remplies :)")
@@ -149,19 +159,10 @@ class SceneNiveau3bis extends Phaser.Scene {
             this.noisettesCD = true;
             this.time.delayedCall(500, this.resertNoisettesCD, [], this);
         }
+
         if (this.cursors.down.isDown) {
-            this.scene.start("SceneNiveau3", {noisettes : this.noisettes})
+            this.scene.start("SceneNiveau2", { noisettes: this.noisettes })
         }
-        //cachette
-        if (this.keyE.isDown && this.cacheBool == true) {
-            console.log("cacher")
-            this.player.setVisible(false);
-            this.cacher = true;
-        }
-        this.grimeBool = false;
-        this.cacheBool = false;
-
-
     }
     verifGrimpette() {
         console.log("verifgrimpette")
@@ -171,7 +172,6 @@ class SceneNiveau3bis extends Phaser.Scene {
         console.log("lancer de noisettes disponibles")
         this.noisettesCD = false;
     }
-
     recupNutt(player, nutt) {
         if (nutt.body.blocked.down) {
             console.log(this.noisettes)
@@ -180,9 +180,10 @@ class SceneNiveau3bis extends Phaser.Scene {
             console.log(this.noisettes)
         }
     }
-
-    retourNiveau3(){
-        console.log("kiwi")
-        this.scene.start("SceneNiveau3",{noisettes : this.noisettes, positionX :2442, positionY : 4418})
+    teleportationVide() {
+        this.player.body.x = 112;
+        this.player.body.y = 1054;
     }
+
+
 }

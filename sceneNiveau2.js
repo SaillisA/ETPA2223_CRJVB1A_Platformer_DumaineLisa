@@ -81,8 +81,8 @@ class SceneNiveau2 extends Phaser.Scene {
 
 
         this.player = this.physics.add.sprite(194, 1620, 'perso');
-        this.player.setSize(230, 130)
-        this.player.setOffset(165, 75)
+        this.player.setSize(250, 130)
+        this.player.setOffset(140, 180)
 
         this.physics.world.setBounds(0, 0, 8960, 4608);
         this.cameras.main.setBounds(0, 0, 8960, 4608);
@@ -118,6 +118,10 @@ class SceneNiveau2 extends Phaser.Scene {
 
             }
             this.player.setVelocityX(-1000); //alors vitesse négative en X
+            this.player.setSize(250, 130)
+            this.player.setOffset(10, 180)
+            this.player.anims.playReverse('left', true); //et animation => gauche
+            this.aninim = 'gauche'
         }
         else if (this.keyD.isDown || this.controller.right) { //sinon si la touche droite est appuyée
             if (this.cacher == true) {
@@ -126,6 +130,10 @@ class SceneNiveau2 extends Phaser.Scene {
                 this.cacher = false;
             }
             this.player.setVelocityX(1000); //alors vitesse positive en X
+            this.player.setSize(250, 130)
+            this.player.setOffset(140, 180)
+            this.player.anims.play('right', true); //et animation => droite
+            this.aninim = 'droite'
         }
         else {
             this.player.setVelocityX(0)

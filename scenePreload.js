@@ -6,26 +6,27 @@ class ScenePreload extends Phaser.Scene {
 
     }
     preload() {
-        //preload de la scene de test
-        //this.load.image('perso', 'assets/perso.png');
-        this.load.image("phaserTilesetTest", "assets/maps/tilesetTest.png");
-        this.load.tilemapTiledJSON("carteTest", "assets/maps/testotest.json");
-        this.load.image('imgNutt', 'assets/noisettes.png')
-
-        //divers
+        //sprites
         this.load.spritesheet('persoDroite','assets/spriteEcureuilDroite.png', {frameWidth: 400, frameHeight: 321});
         this.load.spritesheet('persoGauche','assets/spriteEcureuilGauche.png', {frameWidth: 400, frameHeight: 321});
 
+        //les png transparents
         this.load.image('imgInvisible', 'assets/trans.png');
         this.load.image('imgInvisibleLong', 'assets/transLong.png')
         this.load.image('imgInvisibleHaut', 'assets/transHauteur.png')
         this.load.image('imgInvisibleLarge', 'assets/transLargeur.png')
         this.load.image('imgInvisibleRangeOiseau', 'assets/transRange.png')
+
+        //divers
+        this.load.image('imgNutt', 'assets/noisettes.png')
         this.load.image('imgTrouCachette', 'assets/cache.png')
         this.load.image('imgTrouCachetteMonstre', 'assets/cacheMonstre.png')
 
         this.load.image("phaserTileset", "assets/maps/tileset.png");
 
+        //preload de la scene de test
+        this.load.image("phaserTilesetTest", "assets/maps/tilesetTest.png");
+        this.load.tilemapTiledJSON("carteTest", "assets/maps/testotest.json");
         //preload du niveau 1
         this.load.tilemapTiledJSON("carteNiveau1", "assets/maps/carteTiledNiveau1.json");
         //preload du niveau 2
@@ -35,6 +36,9 @@ class ScenePreload extends Phaser.Scene {
         this.load.image('imgPont', 'assets/pontEn3.png')
         //preload du niveau 3bis
         this.load.tilemapTiledJSON("carteNiveau3bis", "assets/maps/carteTiledNiveau3bis.json");
+        //preload du niveau 4
+        this.load.tilemapTiledJSON("carteNiveau4", "assets/maps/carteTiledNiveau4.json");
+        
     }
     create() {
         this.anims.create({
