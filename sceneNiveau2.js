@@ -12,7 +12,7 @@ class SceneNiveau2 extends Phaser.Scene {
         //lance noisettes
         this.noisettesCD = false;
         this.directionPlayer = "";
-        this.positionJoueurX = 0;
+        this.positionJoueurY = 0;
         this.oiseauBool = true;
 
     }
@@ -66,14 +66,6 @@ class SceneNiveau2 extends Phaser.Scene {
         this.objetRangeNiv2.objects.forEach(objetRangeNiv2 => {
             this.inutile = this.rangeNiv2.create(objetRangeNiv2.x + 2760, objetRangeNiv2.y + 1860, "imgInvisibleRangeOiseau");
         });
-        //oiseau
-        //this.oiseauNiv2 = this.physics.add.group({ immovable: true, allowGravity: false });
-        this.objetOiseauNiv2 = this.carteDuNiv2.getObjectLayer("oiseau");
-        this.objetOiseauNiv2.objects.forEach(objetOiseauNiv2 => {
-            this.oiseauNiv2 = this.physics.add.sprite(objetOiseauNiv2.x + 64 , objetOiseauNiv2.y + 64 , 'imgOiseau');
-            //this.inutile = this.oiseauNiv2.create(objetOiseauNiv2.x + 64 , objetOiseauNiv2.y + 64 , "imgOiseau");
-        });
-        this.oiseauNiv2.body.setAllowGravity(false)
         //vide
         this.videNiv2 = this.physics.add.group({ immovable: true, allowGravity: false });
         this.objetVideNiv2 = this.carteDuNiv2.getObjectLayer("vide");
@@ -99,8 +91,12 @@ class SceneNiveau2 extends Phaser.Scene {
         this.cameras.main.setZoom(0.2);
 
         this.calquePremierPlanNiveau2 = this.carteDuNiv2.createLayer("premierPlan", this.tileset);
-        //calques objet
-
+        //oiseau
+        this.objetOiseauNiv2 = this.carteDuNiv2.getObjectLayer("oiseau");
+        this.objetOiseauNiv2.objects.forEach(objetOiseauNiv2 => {
+            this.oiseauNiv2 = this.physics.add.sprite(objetOiseauNiv2.x + 64 , objetOiseauNiv2.y + 64 , 'imgOiseau');
+        });
+        this.oiseauNiv2.body.setAllowGravity(false)
 
         //oiseau
         this.physics.add.overlap(this.oiseauNiv2, this.player, this.degats, null, this)
@@ -214,6 +210,11 @@ class SceneNiveau2 extends Phaser.Scene {
         this.cacheBool = false;
 
         //Monstres
+        if(this.oiseauNiv2.body.x <=0 && this.oiseauBool == false){
+            this.oiseauNiv2.setVelocityX(0)
+            this.respawnOiseau()
+
+        }
 
         if (this.cursors.down.isDown) {
             this.scene.start("SceneNiveau3", { noisettes: this.noisettes, positionX: 192, positionY: 3212 })
@@ -254,28 +255,27 @@ class SceneNiveau2 extends Phaser.Scene {
             //l'oiseau cris
             this.oiseauBool = false
             this.oiseauNiv2.setVelocityY(-1000)
-            this.time.delayedCall(200, this.attaqueOIseau, [], this);
+            this.time.delayedCall(500, this.attaqueOiseau, [], this);
         }
     }
-    attaqueOIseau() {
+    attaqueOiseau() {
+        this.oiseauNiv2.setVelocityY(0)
         this.positionJoueurY = this.player.body.y
         console.log("oiseau fonce sur joueur")
-        this.oiseauNiv2.body.position.x =9100;
-        this.oiseauNiv2.body.position.y = this.positionJoueurY;
-        this.oiseauNiv2.setVelocityX(-1500)   
-        //this.time.delayCall(100, this.respawnOiseau, [], this)
+        this.oiseauNiv2.setPosition(9100,this.positionJoueurY )
+        this.oiseauNiv2.setVelocityX(-2500)
     }
 
     degats() {
         this.noisettes -= 3;
         console.log("joueur prend des dégats")
     }
-    etourdissement(oiseau, noisette) {
+    /*etourdissement(oiseau, noisette) {
         console.log("oiseau étourdit")
         noisette.destroy()
         this.oiseauNiv2.body.setVelocityY(10000)
-        this.time.delayCall(300, this.respawnOiseau, [], this)
-    }
+        this.time.delayCall(1000, this.respawnOiseau, [], this)
+    }*/
     respawnOiseau() {
         console.log("oiseau revient")
         this.oiseauNiv2.body.position.x = 4156;
