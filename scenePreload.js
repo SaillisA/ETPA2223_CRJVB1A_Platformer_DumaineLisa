@@ -21,6 +21,7 @@ class ScenePreload extends Phaser.Scene {
         this.load.image('imgNutt', 'assets/noisettes.png')
         this.load.image('imgTrouCachette', 'assets/cache.png')
         this.load.image('imgTrouCachetteMonstre', 'assets/cacheMonstre.png')
+        this.load.image('imgOiseau','assets/oiseau.png')
 
         this.load.image("phaserTileset", "assets/maps/tileset.png");
 
