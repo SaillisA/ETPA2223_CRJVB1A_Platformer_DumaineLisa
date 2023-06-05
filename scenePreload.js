@@ -57,7 +57,7 @@ class ScenePreload extends Phaser.Scene {
         });
     }
     update() {
-        this.scene.start('SceneTest')
+        this.scene.start('SceneNiveau1')
     }
 
 }
