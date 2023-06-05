@@ -11,7 +11,7 @@ class SceneNiveau1 extends Phaser.Scene {
         this.noisettesCD = false;
         this.directionPlayer = "";
         //animation
-        this.aninim = ''            //pour déterminer dans quelle direction sera son anim d'attente
+        this.aninim = 'droite'            //pour déterminer dans quelle direction sera son anim d'attente
     }
     init(data) {
 
@@ -44,7 +44,7 @@ class SceneNiveau1 extends Phaser.Scene {
         this.calqueTroncNiv1 = this.carteDuNiv1.createLayer("tronc", this.tileset)
         this.calqueTroncNiv1.setCollisionByProperty({ estSolide: true });
 
-        this.player = this.physics.add.sprite(312, 2750, 'perso');
+        this.player = this.physics.add.sprite(312, 2750, 'persoStandingDroite');
         this.player.setSize(250, 130)
         this.player.setOffset(140, 180)
 
@@ -110,10 +110,14 @@ class SceneNiveau1 extends Phaser.Scene {
         else {
             this.player.setVelocityX(0)
             if(this.aninim == 'gauche'){
-
+                this.player.setSize(210, 140)
+                this.player.setOffset(100, 170)
+                this.player.anims.play('leftStand', true);
             }
             if(this.aninim == 'droite'){
-
+                this.player.setSize(210, 140)
+                this.player.setOffset(100, 170)
+                this.player.anims.play('rightStand', true);
             }
         }
         if (this.cursors.up.isDown || this.controller.up) {

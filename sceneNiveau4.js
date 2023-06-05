@@ -115,11 +115,15 @@ class SceneNiveau4 extends Phaser.Scene {
         }
         else {
             this.player.setVelocityX(0)
-            if (this.aninim == 'gauche') {
-
+            if(this.aninim == 'gauche'){
+                this.player.setSize(210, 140)
+                this.player.setOffset(100, 170)
+                this.player.anims.play('leftStand', true);
             }
-            if (this.aninim == 'droite') {
-
+            if(this.aninim == 'droite'){
+                this.player.setSize(210, 140)
+                this.player.setOffset(100, 170)
+                this.player.anims.play('rightStand', true);
             }
         }
         //direction noisettes

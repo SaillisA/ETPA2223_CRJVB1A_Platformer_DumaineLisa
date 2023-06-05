@@ -7,9 +7,10 @@ class ScenePreload extends Phaser.Scene {
     }
     preload() {
         //sprites
-        this.load.spritesheet('persoDroite','assets/spriteEcureuilDroite.png', {frameWidth: 400, frameHeight: 321});
-        this.load.spritesheet('persoGauche','assets/spriteEcureuilGauche.png', {frameWidth: 400, frameHeight: 321});
-
+        this.load.spritesheet('persoDroite', 'assets/spriteEcureuilDroite.png', { frameWidth: 400, frameHeight: 321 });
+        this.load.spritesheet('persoGauche', 'assets/spriteEcureuilGauche.png', { frameWidth: 400, frameHeight: 321 });
+        this.load.spritesheet("persoStandingDroite", 'assets/ecuDroite.png', { frameWidth: 400, frameHeight: 321 })
+        this.load.spritesheet("persoStandingGauche", 'assets/ecuGauche.png', { frameWidth: 400, frameHeight: 321 })
         //les png transparents
         this.load.image('imgInvisible', 'assets/trans.png');
         this.load.image('imgInvisibleLong', 'assets/transLong.png')
@@ -21,7 +22,7 @@ class ScenePreload extends Phaser.Scene {
         this.load.image('imgNutt', 'assets/noisettes.png')
         this.load.image('imgTrouCachette', 'assets/cache.png')
         this.load.image('imgTrouCachetteMonstre', 'assets/cacheMonstre.png')
-        this.load.image('imgOiseau','assets/oiseau.png')
+        this.load.image('imgOiseau', 'assets/oiseau.png')
 
         this.load.image("phaserTileset", "assets/maps/tileset.png");
 
@@ -39,19 +40,31 @@ class ScenePreload extends Phaser.Scene {
         this.load.tilemapTiledJSON("carteNiveau3bis", "assets/maps/carteTiledNiveau3bis.json");
         //preload du niveau 4
         this.load.tilemapTiledJSON("carteNiveau4", "assets/maps/carteTiledNiveau4.json");
-        this.load.image("imgCleFeuille","assets/cleFeuille.png")
-        
+        this.load.image("imgCleFeuille", "assets/cleFeuille.png")
+
     }
     create() {
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('persoDroite', {start:0,end:5}),
+            frames: this.anims.generateFrameNumbers('persoDroite', { start: 0, end: 5 }),
             frameRate: 10,
             repeat: -1
         });
         this.anims.create({
             key: 'left',
-            frames: this.anims.generateFrameNumbers('persoGauche', {start:0,end:5}),
+            frames: this.anims.generateFrameNumbers('persoGauche', { start: 0, end: 5 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'leftStand',
+            frames: this.anims.generateFrameNumbers('persoStandingGauche', { frame: 0}),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'rightStand',
+            frames: this.anims.generateFrameNumbers('persoStandingDroite', { frame: 0 }),
             frameRate: 10,
             repeat: -1
         });

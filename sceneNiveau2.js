@@ -14,6 +14,8 @@ class SceneNiveau2 extends Phaser.Scene {
         this.directionPlayer = "";
         this.positionJoueurY = 0;
         this.oiseauBool = true;
+        this.degatBool = true;
+        this.aninim = 'droite'            //pour déterminer dans quelle direction sera son anim d'attente
 
     }
     init(data) {
@@ -148,6 +150,16 @@ class SceneNiveau2 extends Phaser.Scene {
         }
         else {
             this.player.setVelocityX(0)
+            if(this.aninim == 'gauche'){
+                this.player.setSize(210, 140)
+                this.player.setOffset(100, 170)
+                this.player.anims.play('leftStand', true);
+            }
+            if(this.aninim == 'droite'){
+                this.player.setSize(210, 140)
+                this.player.setOffset(100, 170)
+                this.player.anims.play('rightStand', true);
+            }
         }
         if (this.cursors.up.isDown || this.controller.up) {
             this.directionPlayer = "up"
@@ -250,11 +262,12 @@ class SceneNiveau2 extends Phaser.Scene {
         }
     }
     criOiseau() {
-        if (this.oiseauBool == true) {
+        if (this.oiseauBool == true && this.cacher ==false) {
             console.log("joueur repérer")
             //l'oiseau cris
             this.oiseauBool = false
             this.oiseauNiv2.setVelocityY(-1000)
+            this.degatBool = true
             this.time.delayedCall(500, this.attaqueOiseau, [], this);
         }
     }
@@ -267,8 +280,16 @@ class SceneNiveau2 extends Phaser.Scene {
     }
 
     degats() {
-        this.noisettes -= 3;
-        console.log("joueur prend des dégats")
+        if(this.cacher == false){
+            if(this.degatBool == true){
+                this.noisettes -= 3;
+                console.log("joueur prend des dégats")
+                this.degatBool = false
+            }
+        }
+        if(this.cacher == true){
+            console.log("pas de dégats")
+        }
     }
     /*etourdissement(oiseau, noisette) {
         console.log("oiseau étourdit")
