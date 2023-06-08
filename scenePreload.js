@@ -23,6 +23,9 @@ class ScenePreload extends Phaser.Scene {
         this.load.image('imgTrouCachette', 'assets/cache.png')
         this.load.image('imgTrouCachetteMonstre', 'assets/cacheMonstre.png')
         this.load.image('imgOiseau', 'assets/oiseau.png')
+        this.load.image('imgUid','assets/uid.png')
+        this.load.image("imgMenu",'assets/menu.png')
+        this.load.image("imgStart","assets/start.png")
 
         this.load.image("phaserTileset", "assets/maps/tileset.png");
 
@@ -68,8 +71,19 @@ class ScenePreload extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
+
+        this.add.image(0,0,"imgMenu").setOrigin(0,0);
+        this.bouton_play = this.add.image(2000, 3000, "imgStart").setDepth(1).setInteractive({ cursor: 'pointer' }).setScale(0.6);
+        this.bouton_play.on("pointerdown",this.start,this);
+        
+        this.physics.world.setBounds(0, 0, 8960, 4608);
+        this.cameras.main.setBounds(0, 0, 8960, 4608);
+        this.cameras.main.setZoom(0.2);
     }
     update() {
+        
+    }
+    start(){
         this.scene.start('SceneNiveau1')
     }
 

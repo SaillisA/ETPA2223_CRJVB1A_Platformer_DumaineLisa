@@ -84,7 +84,7 @@ class SceneNiveau2 extends Phaser.Scene {
 
 
 
-        this.player = this.physics.add.sprite(194, 1620, 'perso');
+        this.player = this.physics.add.sprite(194, 1620, 'persoStandingDroite');
         this.player.setSize(250, 130)
         this.player.setOffset(140, 180)
 
@@ -120,6 +120,8 @@ class SceneNiveau2 extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.trouNiv2, this.cachetteBool, null, this);
         this.physics.add.overlap(this.player, this.sortieNiv2, this.prochainNiveau, null, this);
         this.physics.add.overlap(this.player, this.rangeNiv2, this.criOiseau, null, this);
+
+        this.add.image(0,0,"imgUid").setOrigin(0,0);
     }
 
     update() {

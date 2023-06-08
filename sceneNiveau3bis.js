@@ -44,7 +44,7 @@ class SceneNiveau3bis extends Phaser.Scene {
         this.calqueTroncNiv3bis = this.carteDuNiv3bis.createLayer("tronc", this.tileset);
         this.calqueTroncNiv3bis.setCollisionByProperty({ estSolide: true });
 
-        this.player = this.physics.add.sprite(this.positionX, this.positionY, 'perso');
+        this.player = this.physics.add.sprite(this.positionX, this.positionY, 'persoStandingGauche');
         this.player.setSize(250, 130)
         this.player.setOffset(140, 180)
 
@@ -71,6 +71,8 @@ class SceneNiveau3bis extends Phaser.Scene {
         this.physics.add.collider(this.nutt, this.calqueMurNiv3bis);
         this.physics.add.collider(this.nutt, this.calqueTroncNiv3bis);
         this.physics.add.overlap(this.player, this.nutt, this.recupNutt, null, this)
+
+        this.add.image(0,0,"imgUid").setOrigin(0,0);
     }
 
     update() {

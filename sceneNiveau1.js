@@ -79,6 +79,8 @@ class SceneNiveau1 extends Phaser.Scene {
         //overlap :
         this.physics.add.collider(this.player, this.vide, this.teleportationVide, null, this);
         this.physics.add.collider(this.player, this.sortie, this.prochainNiveau, null, this)
+
+        this.add.image(0,0,"imgUid").setOrigin(0,0);
     }
 
     update() {

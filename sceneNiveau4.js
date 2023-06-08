@@ -47,9 +47,9 @@ class SceneNiveau4 extends Phaser.Scene {
         this.calquePorteNiv4.setCollisionByProperty({ estSolide: true });
 
         //créationd du player
-        this.player = this.physics.add.sprite(112, 1054, 'perso');
-        this.player.setSize(250, 130)
-        this.player.setOffset(140, 180)
+        this.player = this.physics.add.sprite(112, 1054, 'persoStandingDroite');
+        this.player.setSize(210, 140)
+        this.player.setOffset(100, 170)
 
         //création de la caméra
         this.physics.world.setBounds(0, 0, 8960, 4608);
@@ -84,6 +84,8 @@ class SceneNiveau4 extends Phaser.Scene {
         
         //overlap
         this.physics.add.overlap(this.player, this.cleNiv4, this.recupCle, null, this);
+
+        this.add.image(0,0,"imgUid").setOrigin(0,0);
     }
 
     update() {

@@ -43,7 +43,7 @@ class SceneNiveau3 extends Phaser.Scene {
         this.calqueTroncNiv3 = this.carteDuNiv3.createLayer("tronc", this.tileset);
         this.calqueTroncNiv3.setCollisionByProperty({ estSolide: true })
 
-        this.player = this.physics.add.sprite(this.positionX, this.positionY, 'perso');
+        this.player = this.physics.add.sprite(this.positionX, this.positionY, 'persoStandingDroite');
         this.player.setSize(250, 130)
         this.player.setOffset(140, 180)
 
@@ -93,6 +93,8 @@ class SceneNiveau3 extends Phaser.Scene {
         this.physics.add.collider(this.nutt, this.calqueTroncNiv3);
         this.physics.add.overlap(this.player, this.nutt, this.recupNutt, null, this)
         this.physics.add.collider(this.nutt, this.fragileNiv3, this.casserFragile,null,this);
+
+        this.add.image(0,0,"imgUid").setOrigin(0,0);
     }
 
     update() {
