@@ -11,6 +11,8 @@ class ScenePreload extends Phaser.Scene {
         this.load.spritesheet('persoGauche', 'assets/spriteEcureuilGauche.png', { frameWidth: 400, frameHeight: 321 });
         this.load.spritesheet("persoStandingDroite", 'assets/ecuDroite.png', { frameWidth: 400, frameHeight: 321 })
         this.load.spritesheet("persoStandingGauche", 'assets/ecuGauche.png', { frameWidth: 400, frameHeight: 321 })
+        this.load.spritesheet("imgMartreDroite", 'assets/martreDroite.png', { frameWidth: 200, frameHeight: 101 })
+        this.load.spritesheet("imgMartreGauche", 'assets/martreGauche.png', { frameWidth: 200, frameHeight: 101 })
         //les png transparents
         this.load.image('imgInvisible', 'assets/trans.png');
         this.load.image('imgInvisibleLong', 'assets/transLong.png')
@@ -25,7 +27,7 @@ class ScenePreload extends Phaser.Scene {
         this.load.image('imgOiseau', 'assets/oiseau.png')
         this.load.image('imgUid','assets/uid.png')
         this.load.image("imgMenu",'assets/menu.png')
-        this.load.image("imgStart","assets/start.png")
+        this.load.image("imgStart","assets/start.png")        
 
         this.load.image("phaserTileset", "assets/maps/tileset.png");
 
@@ -68,6 +70,18 @@ class ScenePreload extends Phaser.Scene {
         this.anims.create({
             key: 'rightStand',
             frames: this.anims.generateFrameNumbers('persoStandingDroite', { frame: 0 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'martreLeft',
+            frames: this.anims.generateFrameNumbers('imgMartreGauche', { frame: 0}),
+            frameRate: 10,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'martreRight',
+            frames: this.anims.generateFrameNumbers('imgMartreDroite', { frame: 0 }),
             frameRate: 10,
             repeat: -1
         });

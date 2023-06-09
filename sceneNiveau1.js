@@ -43,6 +43,7 @@ class SceneNiveau1 extends Phaser.Scene {
         this.calqueMurNiv1.setCollisionByProperty({ estSolide: true });
         this.calqueTroncNiv1 = this.carteDuNiv1.createLayer("tronc", this.tileset)
         this.calqueTroncNiv1.setCollisionByProperty({ estSolide: true });
+        this.calqueDecoMurNiv1 = this.carteDuNiv1.createLayer("decoMur", this.tileset)
 
         this.player = this.physics.add.sprite(312, 2750, 'persoStandingDroite');
         this.player.setSize(250, 130)
@@ -81,6 +82,7 @@ class SceneNiveau1 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.sortie, this.prochainNiveau, null, this)
 
         this.add.image(0,0,"imgUid").setOrigin(0,0);
+        this.scoreNutt=this.add.text(275,250,this.noisettes,{fontSize:'200px',fill:'#000'});
     }
 
     update() {
@@ -153,8 +155,9 @@ class SceneNiveau1 extends Phaser.Scene {
         }
         //lancer noisettes
         if (this.keyA.isDown && this.noisettes > 0 && this.noisettesCD == false || this.controller.A && this.noisettes > 0 && this.noisettesCD == false) {
-            console.log("condition pour lancer des noisettes remplies :)")
+            console.log("condition pour lancer des noisettes remplies :)") 
             this.noisettes -= 1;
+            this.scoreNutt.setText('' + this.noisettes);
             console.log(this.noisettes)
 
             if (this.directionPlayer == "left") {
@@ -190,6 +193,7 @@ class SceneNiveau1 extends Phaser.Scene {
             console.log(this.noisettes)
             nutt.destroy();
             this.noisettes += 1;
+            this.scoreNutt.setText('' + this.noisettes);
             console.log(this.noisettes)
         }
     }

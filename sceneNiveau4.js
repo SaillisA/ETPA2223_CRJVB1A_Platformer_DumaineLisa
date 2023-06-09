@@ -13,6 +13,8 @@ class SceneNiveau4 extends Phaser.Scene {
         this.directionPlayer = "";
         //animation
         this.aninim = ''            //pour déterminer dans quelle direction sera son anim d'attente
+        this.martreDirection = true         //true = va a droite et false = va a gauche
+        
     }
     init(data) {
 
@@ -46,6 +48,8 @@ class SceneNiveau4 extends Phaser.Scene {
         this.calquePorteNiv4 = this.carteDuNiv4.createLayer("porte", this.tileset);
         this.calquePorteNiv4.setCollisionByProperty({ estSolide: true });
 
+        this.calqueDecoMurNiv4 = this.carteDuNiv4.createLayer("murDeco", this.tileset)
+
         //créationd du player
         this.player = this.physics.add.sprite(112, 1054, 'persoStandingDroite');
         this.player.setSize(210, 140)
@@ -69,23 +73,45 @@ class SceneNiveau4 extends Phaser.Scene {
         this.objetCleNiv4.objects.forEach(objetCleNiv4 => {
             this.inutile = this.cleNiv4.create(objetCleNiv4.x + 64, objetCleNiv4.y + 64, "imgCleFeuille");
         });
+        //sortie
+        this.sortieNiv4 = this.physics.add.group({ immovable: true, allowGravity: false });
+        this.objetSortieNiv4 = this.carteDuNiv4.getObjectLayer("sortie");
+        this.objetSortieNiv4.objects.forEach(objetSortieNiv4 => {
+            this.inutile = this.sortieNiv4.create(objetSortieNiv4.x + 64, objetSortieNiv4.y + 64, "imgInvisibleHaut");
+        });
+        //colliser
+        this.collisionNiv4 = this.physics.add.group({ immovable: true, allowGravity: false });
+        this.objetCollisionNiv4 = this.carteDuNiv4.getObjectLayer("collision");
+        this.objetCollisionNiv4.objects.forEach(objetCollisionNiv4 => {
+            this.inutile = this.collisionNiv4.create(objetCollisionNiv4.x + 64, objetCollisionNiv4.y + 64, "imgInvisibleHaut");
+        });
 
         //pour la noisettes
         this.noisettesCD = false;
         this.nutt = this.physics.add.group();
         this.physics.add.overlap(this.player, this.nutt, this.recupNutt, null, this)
+        this.physics.add.collider(this.nutt, this.calqueMurNiv4)
+        //martre
+        this.degatBool == true
+        this.martre = this.physics.add.group();
+        this.martre.create(2304, 3968, "imgMartreDroite").body.setVelocityX(1000)
+        this.physics.add.collider(this.martre, this.calqueMurNiv4);
+        this.physics.add.collider(this.martre, this.collisionNiv4, this.changementDirection, null, this);
+        this.physics.add.overlap(this.martre, this.player, this.degats, null, this)
 
-        //collider
+        //collider 
         this.physics.add.collider(this.player, this.calqueMurNiv4);
         this.physics.add.collider(this.player, this.calqueTroncNiv4, this.verifGrimpette, null, this);
         this.physics.add.collider(this.player, this.videNiv4, this.teleportationVide, null, this);
         this.collisionPorteNiv4 = this.physics.add.collider(this.player, this.calquePorteNiv4, this.ouverture, null, this);
-
+        
         
         //overlap
         this.physics.add.overlap(this.player, this.cleNiv4, this.recupCle, null, this);
+        this.physics.add.overlap(this.player, this.sortieNiv4, this.finJeu, null, this);
 
         this.add.image(0,0,"imgUid").setOrigin(0,0);
+        this.scoreNutt=this.add.text(275,250,this.noisettes,{fontSize:'200px',fill:'#000'});
     }
 
     update() {
@@ -163,6 +189,7 @@ class SceneNiveau4 extends Phaser.Scene {
         if (this.keyA.isDown && this.noisettes > 0 && this.noisettesCD == false || this.controller.A && this.noisettes > 0 && this.noisettesCD == false) {
             console.log("condition pour lancer des noisettes remplies :)")
             this.noisettes -= 1;
+            this.scoreNutt.setText('' + this.noisettes);
             console.log(this.noisettes)
 
             if (this.directionPlayer == "left") {
@@ -180,7 +207,7 @@ class SceneNiveau4 extends Phaser.Scene {
         }
 
         if (this.cursors.down.isDown) {
-            this.scene.start("SceneNiveau2", { noisettes: this.noisettes })
+            this.scene.start("SceneFin", { noisettes: this.noisettes })
         }
     }
     verifGrimpette() {
@@ -196,6 +223,7 @@ class SceneNiveau4 extends Phaser.Scene {
             console.log(this.noisettes)
             nutt.destroy();
             this.noisettes += 1;
+            this.scoreNutt.setText('' + this.noisettes);
             console.log(this.noisettes)
         }
     }
@@ -213,6 +241,35 @@ class SceneNiveau4 extends Phaser.Scene {
         this.cle += 1;
         console.log(this.cle)
         clecle.destroy()
+    }
+    finJeu(){
+        console.log("fin")
+        this.scene.start("SceneFin",{noisettes : this.noisettes})
+    }
+    changementDirection(martre,collision){
+        if(this.martreDirection == true){
+            martre.anims.play('martreRight', true);
+            martre.body.setVelocityX(1000)
+            this.martreDirection =false
+        }
+        else{
+            martre.anims.play('martreLeft', true);
+            martre.body.setVelocityX(-1000)
+            this.martreDirection =true
+        }
+    }
+    degats() {
+        if(this.degatBool == true){
+            this.noisettes -= 2;
+            this.scoreNutt.setText('' + this.noisettes);
+            console.log("joueur prend des dégats")
+            this.degatBool = false
+            this.time.delayedCall(500, this.cdAttaque, [], this);
+           
+        }
+    }
+    cdAttaque(){
+        this.degatBool = true
     }
 
 }

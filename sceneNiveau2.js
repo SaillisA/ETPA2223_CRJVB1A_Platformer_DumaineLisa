@@ -55,6 +55,8 @@ class SceneNiveau2 extends Phaser.Scene {
         this.calqueTroncNiv2 = this.carteDuNiv2.createLayer("tronc", this.tileset);
         this.calqueTroncNiv2.setCollisionByProperty({ estSolide: true })
 
+        this.calqueDecoMurNiv2 = this.carteDuNiv2.createLayer("murDeco", this.tileset)
+
         //calques objet
         //cachettes trous
         this.trouNiv2 = this.physics.add.group({ immovable: true, allowGravity: false });
@@ -66,19 +68,25 @@ class SceneNiveau2 extends Phaser.Scene {
         this.rangeNiv2 = this.physics.add.group({ immovable: true, allowGravity: false });
         this.objetRangeNiv2 = this.carteDuNiv2.getObjectLayer("rangeDetection");
         this.objetRangeNiv2.objects.forEach(objetRangeNiv2 => {
-            this.inutile = this.rangeNiv2.create(objetRangeNiv2.x + 2760, objetRangeNiv2.y + 1860, "imgInvisibleRangeOiseau");
+            this.inutile = this.rangeNiv2.create(objetRangeNiv2.x + 2384, objetRangeNiv2.y + 1860, "imgInvisibleRangeOiseau");
         });
         //vide
         this.videNiv2 = this.physics.add.group({ immovable: true, allowGravity: false });
         this.objetVideNiv2 = this.carteDuNiv2.getObjectLayer("vide");
         this.objetVideNiv2.objects.forEach(objetVideNiv2 => {
-            this.inutile = this.videNiv2.create(objetVideNiv2.x + 4480, objetVideNiv2.y + 128, "imgInvisibleLong");
+            this.inutile = this.videNiv2.create(objetVideNiv2.x + 4300, objetVideNiv2.y + 128, "imgInvisibleLong");
         });
         //sortie
         this.sortieNiv2 = this.physics.add.group({ immovable: true, allowGravity: false });
         this.objetSortieNiv2 = this.carteDuNiv2.getObjectLayer("sortie");
         this.objetSortieNiv2.objects.forEach(objetSortieNiv2 => {
             this.inutile = this.sortieNiv2.create(objetSortieNiv2.x, objetSortieNiv2.y + 320, "imgInvisibleHaut");
+        });
+        //noisetteSpawn
+        this.spawnNuttNiv2 = this.physics.add.group({ immovable: true, allowGravity: true });
+        this.objetSpawnNuttNiv2 = this.carteDuNiv2.getObjectLayer("spawnNutt");
+        this.objetSpawnNuttNiv2.objects.forEach(objetSpawnNuttNiv2 => {
+            this.inutile = this.spawnNuttNiv2.create(objetSpawnNuttNiv2.x+0, objetSpawnNuttNiv2.y + 0, "imgNutt");
         });
 
 
@@ -116,12 +124,15 @@ class SceneNiveau2 extends Phaser.Scene {
         this.collisionMurCasser = this.physics.add.collider(this.player, this.calqueMurCasserNiv2);
         this.collisionMurFragile = this.physics.add.collider(this.player, this.calqueMurFragileNiv2);
         this.physics.add.collider(this.player, this.videNiv2, this.teleportationVide, null, this);
+        this.physics.add.collider(this.spawnNuttNiv2, this.calqueMurNiv2);
         //overlap :
         this.physics.add.overlap(this.player, this.trouNiv2, this.cachetteBool, null, this);
         this.physics.add.overlap(this.player, this.sortieNiv2, this.prochainNiveau, null, this);
         this.physics.add.overlap(this.player, this.rangeNiv2, this.criOiseau, null, this);
+        this.physics.add.overlap(this.player, this.spawnNuttNiv2, this.recupNutt, null, this);
 
         this.add.image(0,0,"imgUid").setOrigin(0,0);
+        this.scoreNutt=this.add.text(275,250,this.noisettes,{fontSize:'200px',fill:'#000'});
     }
 
     update() {
@@ -196,6 +207,7 @@ class SceneNiveau2 extends Phaser.Scene {
         if (this.keyA.isDown && this.noisettes > 0 && this.noisettesCD == false || this.controller.A && this.noisettes > 0 && this.noisettesCD == false) {
             console.log("condition pour lancer des noisettes remplies :)")
             this.noisettes -= 1;
+            this.scoreNutt.setText('' + this.noisettes);
             console.log(this.noisettes)
 
             if (this.directionPlayer == "left") {
@@ -260,6 +272,7 @@ class SceneNiveau2 extends Phaser.Scene {
             console.log(this.noisettes)
             nutt.destroy();
             this.noisettes += 1;
+            this.scoreNutt.setText('' + this.noisettes);
             console.log(this.noisettes)
         }
     }
@@ -284,7 +297,8 @@ class SceneNiveau2 extends Phaser.Scene {
     degats() {
         if(this.cacher == false){
             if(this.degatBool == true){
-                this.noisettes -= 3;
+                this.noisettes -= 2;
+                this.scoreNutt.setText('' + this.noisettes);
                 console.log("joueur prend des dégats")
                 this.degatBool = false
             }
